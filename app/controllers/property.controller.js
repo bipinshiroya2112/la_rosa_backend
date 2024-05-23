@@ -49,6 +49,8 @@ async function sendPropertyDetails(req, res) {
       remember_details,
     } = req.body;
 
+    console.log("req.body::>>", req.body);
+
     if (
       !reason ||
       !first_name ||
