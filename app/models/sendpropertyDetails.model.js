@@ -2,11 +2,11 @@ var mongoose = require('mongoose')
 const { Schema, model } = require("mongoose");
 const validator = require("validator");
 
-  
+
 const propertydetails = new Schema({
     timeframe: {
         type: String,
-         // required : true   
+        // required : true   
     },
     reason: {
         type: String,
@@ -36,7 +36,7 @@ const propertydetails = new Schema({
     email: {
         type: String,
         // required: true,
-        unique: true,
+        // unique: true,
         trim: true,
         lowercase: true,
     },
@@ -56,11 +56,11 @@ const propertydetails = new Schema({
     },
     remember_details: {
         type: Boolean,
-        default : false
+        default: false
     },
     agent_id: {
         type: mongoose.Schema.Types.ObjectId,
-        ref : "agents"
+        ref: "agents"
     },
     agency_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -81,7 +81,7 @@ const propertydetails = new Schema({
     //     default: 'property',
     //     trim: true
     // },
-    
+
 
 }, { timestamps: true, versionKey: false })
 module.exports = mongoose.model('sendPropertydetails', propertydetails)
