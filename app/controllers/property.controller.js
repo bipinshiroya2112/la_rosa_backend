@@ -51,23 +51,23 @@ async function sendPropertyDetails(req, res) {
 
     console.log("req.body::>>", req.body);
 
-    if (
-      !reason ||
-      !first_name ||
-      !last_name ||
-      !email ||
-      !mobile_no ||
-      !prefer_to_be_contacted ||
-      !timeframe ||
-      !address ||
-      !type
-    ) {
-      return res.status(HTTP.SUCCESS).send({
-        status: false,
-        code: HTTP.BAD_REQUEST,
-        message: "all fields required!",
-      });
-    }
+    // if (
+    //   !reason ||
+    //   !first_name ||
+    //   !last_name ||
+    //   !email ||
+    //   !mobile_no ||
+    //   !prefer_to_be_contacted ||
+    //   !timeframe ||
+    //   !address ||
+    //   !type
+    // ) {
+    //   return res.status(HTTP.SUCCESS).send({
+    //     status: false,
+    //     code: HTTP.BAD_REQUEST,
+    //     message: "all fields required!",
+    //   });
+    // }
 
     if (!email?.includes("@")) {
       return res.status(HTTP.SUCCESS).send({
