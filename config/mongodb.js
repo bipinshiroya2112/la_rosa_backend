@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 mongoose.set('strictQuery', true)
 require('dotenv').config()
 const MONGODB = process.env.MONGODB
+console.log('================================', MONGODB);
 mongoose.connect(`${MONGODB}/larosaBackend`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
