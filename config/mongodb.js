@@ -1,8 +1,8 @@
-
-
 const mongoose = require('mongoose');
 mongoose.set('strictQuery', true)
-mongoose.connect("mongodb://127.0.0.1:27017/larosaBackend", {
+require('dotenv').config()
+const MONGODB = process.env.MONGODB
+mongoose.connect(`${MONGODB}/larosaBackend`, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 }).then(() => {
