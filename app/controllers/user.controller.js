@@ -1861,6 +1861,48 @@ async function propertyData(req, res) {
     });
   }
 }
+//================================================================  update password ====================================================================================
+
+const updatePassword = async (req, res) => {
+  try {
+    let { currentPassword, newPassword, confirmPassword } = req.body;
+    let user = req.user;
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return res.status(HTTP.SUCCESS).send({
+        success: false,
+        code: HTTP.NOT_ALLOWED,
+        message: "All fields are required!",
+        datalink: {},
+      });
+    }
+    const findUser = await Register.findOne({ email: user.email });
+    if (!findUser) {
+      return res.status(HTTP.SUCCESS).send({
+        success: false,
+        code: HTTP.NOT_FOUND,
+        message: "Record not found",
+        data: {},
+      });
+    }
+
+    const jwt_secret = process.env.JWT_SECRET;
+    const comparePassword = bcrypt.compareSync(currentPassword, findUser.password)
+
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Check your email",
+      data: comparePassword,
+    });
+  } catch (error) {
+    console.error("Error updated password:", error);
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
 
 module.exports = {
   dashboard,
@@ -1869,6 +1911,7 @@ module.exports = {
   verifyOtp,
   Login,
   forgotPassword,
+  updatePassword,
   setNewPassword,
   getUserProfile,
   updateProfile,

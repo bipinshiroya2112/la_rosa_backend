@@ -21,6 +21,7 @@ router.post("/signin", userControllers.Login);
 router.post("/login-with-google", userControllers.loginWithGoogle);
 router.post("/login-with-facebook", userControllers.loginWithFacebook);
 router.post("/forgotPassword", userControllers.forgotPassword);
+router.post("/updatePassword", authUser, userControllers.updatePassword);
 
 router.post("/setNewPassword", userControllers.setNewPassword);
 
