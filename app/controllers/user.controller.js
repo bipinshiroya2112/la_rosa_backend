@@ -1869,7 +1869,7 @@ const updatePassword = async (req, res) => {
     let user = req.user;
     if (!currentPassword || !newPassword || !confirmPassword) {
       return res.status(HTTP.SUCCESS).send({
-        success: false,
+        status: false,
         code: HTTP.NOT_ALLOWED,
         message: "All fields are required!",
         data: {},
@@ -1878,7 +1878,7 @@ const updatePassword = async (req, res) => {
     const findUser = await Register.findOne({ email: user.email });
     if (!findUser) {
       return res.status(HTTP.SUCCESS).send({
-        success: false,
+        status: false,
         code: HTTP.NOT_FOUND,
         message: "Record not found",
         data: {},
@@ -1890,7 +1890,7 @@ const updatePassword = async (req, res) => {
 
     if (!comparePassword) {
       return res.status(HTTP.SUCCESS).send({
-        success: false,
+        status: false,
         code: HTTP.BAD_REQUEST,
         message: "Current password is incorrect",
         data: {},
