@@ -241,11 +241,15 @@ async function searchProperty(req, res) {
       }
 
       if (query.Bedrooms !== undefined) {
-        matchStage.Bedrooms = query.Bedrooms;
+        if (query.Bedrooms != 'any') {
+          matchStage.Bedrooms = query.Bedrooms;
+        }
       }
 
       if (query.Bathrooms !== undefined) {
-        matchStage.Bathrooms = query.Bathrooms;
+        if (query.Bathrooms != 'any') {
+          matchStage.Bathrooms = query.Bathrooms;
+        }
       }
 
       if (query.price_min && query.price_max) {
@@ -261,7 +265,8 @@ async function searchProperty(req, res) {
         pipeline.push({ $match: matchStage });
       }
 
-      console.log(matchStage, "------------------------>>>>>");
+      // console.log(matchStage, "------------------------>>>>>");
+      // console.log("------------------------>>>>>", pipeline);
 
       const filteredProperties = await property_listing.aggregate(pipeline);
       for (const data of filteredProperties) {
