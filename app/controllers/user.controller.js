@@ -1872,7 +1872,7 @@ const updatePassword = async (req, res) => {
         success: false,
         code: HTTP.NOT_ALLOWED,
         message: "All fields are required!",
-        datalink: {},
+        data: {},
       });
     }
     const findUser = await Register.findOne({ email: user.email });
@@ -1886,13 +1886,28 @@ const updatePassword = async (req, res) => {
     }
 
     const jwt_secret = process.env.JWT_SECRET;
-    const comparePassword = bcrypt.compareSync(currentPassword, findUser.password)
+    const comparePassword = bcrypt.compareSync(currentPassword, findUser.password);
+
+    if (!comparePassword) {
+      return res.status(HTTP.SUCCESS).send({
+        success: false,
+        code: HTTP.BAD_REQUEST,
+        message: "Current password is incorrect",
+        data: {},
+      });
+    }
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    const updateUser = await Register.findByIdAndUpdate(user._id,
+      {
+        password: hashedPassword,
+      },
+      { new: true })
 
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
-      message: "Check your email",
-      data: comparePassword,
+      message: "Password updated successfully",
+      data: {},
     });
   } catch (error) {
     console.error("Error updated password:", error);
