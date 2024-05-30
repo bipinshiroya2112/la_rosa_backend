@@ -337,7 +337,7 @@ const sendContactusemail = (sendData) => {
 
         var mailOptions = {
           from: "tanthetaauser@gmail.com",
-          to: "info@myrealestate.ng",
+          to: "info@myrealestate-ng.com",
           subject: "contact us email",
           html: htmlToSend,
         };
