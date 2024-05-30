@@ -50,6 +50,7 @@ app.post("/api/image/upload", upload.fields({}), async (req, res) => {
     const jsonResponse = await vercel.handleUpload({
       body: req.body,
       request: req,
+      token: process.env.BLOB_READ_WRITE_TOKEN,
       onBeforeGenerateToken: async (pathname) => {
         console.log('Generating upload token for:', pathname);
         return {
