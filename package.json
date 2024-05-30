@@ -13,6 +13,7 @@
   "dependencies": {
     "@esri/arcgis-rest-geocoding": "^4.0.0",
     "@esri/arcgis-rest-request": "^4.1.2",
+    "@vercel/blob": "^0.23.3",
     "axios": "^0.27.2",
     "bcrypt": "^5.1.0",
     "bcryptjs": "^2.4.3",

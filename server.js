@@ -11,7 +11,9 @@ const passport = require('passport')
 const userRouter = require('./app/routes/user.route')
 const adminAgencyRouter = require('./app/routes/admin_Agency_router')
 const admin_router = require('./app/routes/admin_router')
-
+const multer = require('multer');
+const upload = multer();
+const vercel = require('@vercel/blob/client');
 
 // dtQcltpZHeYY1pkQCu6XRoqfWsDDu9QbY3NQ1Lb8YMF9xP-FMlI-qBJ7WZxXxlFl0Z4
 
@@ -29,6 +31,7 @@ require('./config/passport')
 app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
+app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
 app.use(cors({ credentials: true, origin: true }));
@@ -41,6 +44,34 @@ app.use(cookieParser());
 app.use(userRouter);
 app.use(adminAgencyRouter)
 app.use(admin_router)
+
+app.post("/api/image/upload", upload.fields({}), async (req, res) => {
+  try {
+    const jsonResponse = await vercel.handleUpload({
+      body: req.body,
+      request: req,
+      onBeforeGenerateToken: async (pathname) => {
+        console.log('Generating upload token for:', pathname);
+        return {
+          allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif'],
+          tokenPayload: JSON.stringify({}),
+        };
+      },
+      onUploadCompleted: async ({ blob, tokenPayload }) => {
+        console.log('Blob upload completed:', blob, tokenPayload);
+        try {
+          console.log('Blob URL:', blob.url);
+        } catch (error) {
+          console.error('Error during post-upload processing:', error);
+          throw new Error('Could not complete post-upload processing');
+        }
+      },
+    });
+    return res.status(200).json(jsonResponse);
+  } catch (error) {
+    console.log("blob error:", error);
+  }
+});
 
 
 app.get('/', (req, res) => {

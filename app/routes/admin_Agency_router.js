@@ -74,10 +74,7 @@ router.post(
 
 router.post(
   "/Agency_Agent/Register",
-  agent_img.fields([
-    { name: "profileImg", maxCount: 2 },
-    { name: "coverProfileImg", maxCount: 2 },
-  ]),
+  upload,
   authagency,
   adminagencyController.agentregister
 );
@@ -88,10 +85,7 @@ router.post(
 );
 router.post(
   "/Agency_Agent/UpdateProfile",
-  agent_img.fields([
-    { name: "profileImg", maxCount: 2 },
-    { name: "coverProfileImg", maxCount: 2 },
-  ]),
+  upload,
   adminagencyController.agentUpdateProfile
 );
 router.post("/Agency_Agent/Delete", adminagencyController.agentDelete);

@@ -2240,6 +2240,8 @@ async function agentregister(req, res) {
       weakly_update,
       agency_id,
       reviews,
+      profileImg,
+      coverProfileImg
     } = req.body;
 
     var name = first_name + " " + last_name;
@@ -2250,12 +2252,6 @@ async function agentregister(req, res) {
         code: HTTP.BAD_REQUEST,
         message: "Email and confirm email does not match",
       });
-
-    var photo = req?.files?.profileImg?.find((item) => item);
-    var profileImg = "uploads/agent/" + photo?.filename;
-
-    var profile = req?.files?.coverProfileImg?.find((item) => item);
-    var coverProfileImg = "uploads/agent/" + profile?.filename;
 
     // if (!start_year_in_industry || !license_number) {
     //   return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.NOT_FOUND, message: "All fields are required!", data: {} });
@@ -2477,9 +2473,11 @@ async function agentUpdateProfile(req, res) {
       residential_sales,
       residential_property_management,
       weakly_update,
+      profileImg,
+      coverProfileImg
     } = req.body;
 
-    var { coverProfileImg, profileImg } = req.files;
+    // var { coverProfileImg, profileImg } = req.files;
 
     var name = first_name + " " + last_name;
 
@@ -2507,91 +2505,91 @@ async function agentUpdateProfile(req, res) {
 
       const doc = await admin_agent.findById(id, {}, { new: true });
 
-      if (req.files.profileImg) {
-        if (req.files.profileImg !== null) {
-          // console.log(doc, "-------------------->");
-          if (doc.profileImg) {
-            fs.unlinkSync(path.join(__dirname, "..", "..", doc.profileImg));
-          }
-          for (data of req.files.profileImg) {
-            profileImg = "uploads/agent" + data.filename;
-            console.log(
-              "🚀 ~ file: blog.controller.js:556 ~ editBlog ~ outsideImg",
-              profileImg
-            );
-            await admin_agent.findByIdAndUpdate(
-              id,
-              { profileImg, name },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          //console.log(doc, "--------------------><------------------------");
-          var imagePath = "";
-          if (doc.profileImg) {
-            imagePath = doc.profileImg;
-          }
-          for (data of req.files.profileImg) {
-            await admin_agent.findByIdAndUpdate(
-              id,
-              { profileImg: imagePath, name },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
-      }
-      if (req.files.coverProfileImg) {
-        if (req.files.coverProfileImg !== null) {
-          // console.log(doc.coverProfileImg, "-------------------->123");
-          if (doc.coverProfileImg) {
-            fs.unlinkSync(
-              path.join(__dirname, "..", "..", doc.coverProfileImg)
-            );
-          }
-          for (data of req.files.coverProfileImg) {
-            coverProfileImg = "uploads/agent" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:589 ~ editBlog ~ outsideImg",coverProfileImg);
-            await admin_agent.findByIdAndUpdate(
-              id,
-              { coverProfileImg: coverProfileImg, name },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          // console.log(doc, "--------------------><--------------------");
-          var imagePath = "";
-          if (doc.coverProfileImg) {
-            imagePath = doc.coverProfileImg;
-          }
-          for (data of req.files.coverProfileImg) {
-            await admin_agent.findByIdAndUpdate(
-              id,
-              { coverProfileImg: imagePath, name },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
-      }
+      // if (req.files.profileImg) {
+      //   if (req.files.profileImg !== null) {
+      //     // console.log(doc, "-------------------->");
+      //     if (doc.profileImg) {
+      //       fs.unlinkSync(path.join(__dirname, "..", "..", doc.profileImg));
+      //     }
+      //     for (data of req.files.profileImg) {
+      //       profileImg = "uploads/agent" + data.filename;
+      //       console.log(
+      //         "🚀 ~ file: blog.controller.js:556 ~ editBlog ~ outsideImg",
+      //         profileImg
+      //       );
+      //       await admin_agent.findByIdAndUpdate(
+      //         id,
+      //         { profileImg, name },
+      //         { new: true }
+      //       ),
+      //         function (err, docs) {
+      //           if (err) {
+      //             console.log(err);
+      //           }
+      //         };
+      //     }
+      //   } else {
+      //     //console.log(doc, "--------------------><------------------------");
+      //     var imagePath = "";
+      //     if (doc.profileImg) {
+      //       imagePath = doc.profileImg;
+      //     }
+      //     for (data of req.files.profileImg) {
+      //       await admin_agent.findByIdAndUpdate(
+      //         id,
+      //         { profileImg: imagePath, name },
+      //         { new: true }
+      //       ),
+      //         function (err, docs) {
+      //           if (err) {
+      //             console.log(err);
+      //           }
+      //         };
+      //     }
+      //   }
+      // }
+      // if (req.files.coverProfileImg) {
+      //   if (req.files.coverProfileImg !== null) {
+      //     // console.log(doc.coverProfileImg, "-------------------->123");
+      //     if (doc.coverProfileImg) {
+      //       fs.unlinkSync(
+      //         path.join(__dirname, "..", "..", doc.coverProfileImg)
+      //       );
+      //     }
+      //     for (data of req.files.coverProfileImg) {
+      //       coverProfileImg = "uploads/agent" + data.filename;
+      //       // console.log("🚀 ~ file: blog.controller.js:589 ~ editBlog ~ outsideImg",coverProfileImg);
+      //       await admin_agent.findByIdAndUpdate(
+      //         id,
+      //         { coverProfileImg: coverProfileImg, name },
+      //         { new: true }
+      //       ),
+      //         function (err, docs) {
+      //           if (err) {
+      //             console.log(err);
+      //           }
+      //         };
+      //     }
+      //   } else {
+      //     // console.log(doc, "--------------------><--------------------");
+      //     var imagePath = "";
+      //     if (doc.coverProfileImg) {
+      //       imagePath = doc.coverProfileImg;
+      //     }
+      //     for (data of req.files.coverProfileImg) {
+      //       await admin_agent.findByIdAndUpdate(
+      //         id,
+      //         { coverProfileImg: imagePath, name },
+      //         { new: true }
+      //       ),
+      //         function (err, docs) {
+      //           if (err) {
+      //             console.log(err);
+      //           }
+      //         };
+      //     }
+      //   }
+      // }
 
       return res.status(HTTP.SUCCESS).send({
         status: true,
@@ -2996,17 +2994,17 @@ async function sortBy(req, res) {
         .sort({ updatedAt: 1 });
       properties.length <= 0
         ? res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "No Properties Sold Yet.",
-            data: properties,
-          })
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "No Properties Sold Yet.",
+          data: properties,
+        })
         : res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "Properties",
-            data: properties,
-          });
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "Properties",
+          data: properties,
+        });
     }
     if (req.body.sort_by == "Sold Date (Newest - Oldest)") {
       const properties = await property_listing
@@ -3014,17 +3012,17 @@ async function sortBy(req, res) {
         .sort({ updatedAt: -1 });
       properties.length <= 0
         ? res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "No Properties Sold Yet.",
-            data: properties,
-          })
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "No Properties Sold Yet.",
+          data: properties,
+        })
         : res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "Properties",
-            data: properties,
-          });
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "Properties",
+          data: properties,
+        });
     }
     if (req.body.sort_by == "Sold Price (Low - High)") {
       const properties = await property_listing
@@ -3032,17 +3030,17 @@ async function sortBy(req, res) {
         .sort({ price: 1 });
       properties.length <= 0
         ? res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "No Properties Sold Yet.",
-            data: properties,
-          })
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "No Properties Sold Yet.",
+          data: properties,
+        })
         : res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "Properties",
-            data: properties,
-          });
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "Properties",
+          data: properties,
+        });
     }
 
     if (req.body.sort_by == "Sold Price (High - Low)") {
@@ -3051,17 +3049,17 @@ async function sortBy(req, res) {
         .sort({ price: -1 });
       properties.length <= 0
         ? res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "No Properties Sold Yet.",
-            data: properties,
-          })
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "No Properties Sold Yet.",
+          data: properties,
+        })
         : res.status(HTTP.SUCCESS).send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "Properties",
-            data: properties,
-          });
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "Properties",
+          data: properties,
+        });
     }
 
     return res.status(HTTP.SUCCESS).send({
