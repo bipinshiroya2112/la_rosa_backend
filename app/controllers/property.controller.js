@@ -1210,6 +1210,27 @@ async function viewAllProperty(req, res) {
   }
 }
 
+
+//==================================================================================
+const getPropertyDetails = async (req, res) => {
+  try {
+    let listings = await sendPropertyDetail.find({ agent_id: req.Data })
+    return res.status(HTTP.SUCCESS).send({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Appraisal details.",
+      data: listings,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(HTTP.SUCCESS).send({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      message: "Something went wrong!",
+      data: {},
+    });
+  }
+}
 //===============================================================================================================================================================================
 
 module.exports = {
@@ -1225,4 +1246,5 @@ module.exports = {
   propertyByAgency,
   propertyUpdate,
   viewAllProperty,
+  getPropertyDetails
 };

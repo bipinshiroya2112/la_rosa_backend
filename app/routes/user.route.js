@@ -7,6 +7,7 @@ const propertyControllers = require("../controllers/property.controller");
 const {
   verifyToken,
   verifyResetPasswordToken,
+  authagency,
 } = require("../middlewares/verifyToken");
 const { authUser } = require("../middlewares/verifyToken");
 const { auth } = require("../middlewares/verifyToken");
@@ -46,6 +47,7 @@ router.post("/verifyMail", authUser, userControllers.verifyMail);
 // =================== Property Details===================================
 
 router.post("/sendPropertyDetails", propertyControllers.sendPropertyDetails);
+router.get("/get/propertyDetails", authagency, propertyControllers.getPropertyDetails);
 router.post("/agentReview/:id", propertyControllers.agentReview);
 router.post("/agencyReview", propertyControllers.agencyReview);
 router.post("/sendEnquiry", authUser, propertyControllers.sendEnquiry);
