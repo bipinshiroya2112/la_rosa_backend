@@ -28,7 +28,7 @@ require('./config/passport')
 
 
 
-app.use(express.static('public'));
+app.use('/public', express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(express.urlencoded({ extended: true }))
