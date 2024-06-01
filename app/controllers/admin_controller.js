@@ -149,8 +149,8 @@ async function ViewAllproperty(req, res) {
       var property_data = await property_listing
         .find({ role: "property" })
         .populate({
-            path: "lead_agent",
-            select: "first_name last_name"
+          path: "lead_agent",
+          select: "first_name last_name"
         });
       // console.log("🚀 ~ file: admin_controller.js:80 ~ ViewAllproperty ~ property_data:", property_data)
       return res
@@ -1533,13 +1533,16 @@ async function ListingCreate(req, res) {
         online_tour_2,
         agency_listing_url,
         inspection_times,
+        propertyImg,
+        florePlansImg,
+        statementOfInfo,
+        frontPageImg
       } = req.body;
 
       console.log("---BODY----->>>", req.body);
-      var agent = JSON.parse(lead_agent);
 
-      var { propertyImg, florePlansImg, frontPageImg, statementOfInfo } =
-        req.files;
+      // var { propertyImg, florePlansImg, frontPageImg, statementOfInfo } =
+      //   req.files;
 
       if (!propertyImg || !florePlansImg || !statementOfInfo || !frontPageImg) {
         return res
@@ -1571,21 +1574,21 @@ async function ListingCreate(req, res) {
       }
 
       // inspection_times = JSON.parse(inspection_times);
+      var agent = JSON.parse(lead_agent);
+      // var propertyImg = [];
 
-      var propertyImg = [];
+      // for (const data of req.files.propertyImg) {
+      //   propertyImg.push("uploads/property_image" + data.filename);
+      // }
 
-      for (const data of req.files.propertyImg) {
-        propertyImg.push("uploads/property_image" + data.filename);
-      }
+      // var plan = req.files.florePlansImg.find((item) => item);
+      // var florePlansImg = "uploads/property_image" + plan.filename;
 
-      var plan = req.files.florePlansImg.find((item) => item);
-      var florePlansImg = "uploads/property_image" + plan.filename;
+      // var statement = req.files.statementOfInfo.find((item) => item);
+      // var statementOfInfo = "uploads/property_image" + statement.filename;
 
-      var statement = req.files.statementOfInfo.find((item) => item);
-      var statementOfInfo = "uploads/property_image" + statement.filename;
-
-      var frontPage = req.files.frontPageImg.find((item) => item);
-      var frontPageImg = "uploads/property_image" + frontPage.filename;
+      // var frontPage = req.files.frontPageImg.find((item) => item);
+      // var frontPageImg = "uploads/property_image" + frontPage.filename;
 
       var agencyId_Data = req.Data;
 
@@ -1595,6 +1598,10 @@ async function ListingCreate(req, res) {
       let heating = JSON.parse(req.body.heating_cooling);
       let eco = JSON.parse(req.body.eco_friendly);
       let climate = JSON.parse(req.body.climate_energy);
+      let propertyImage = JSON.parse(req.body.propertyImg);
+      let florImage = JSON.parse(req.body.florePlansImg);
+      let statementPdf = JSON.parse(req.body.statementOfInfo);
+      let frontImage = JSON.parse(req.body.frontPageImg);
 
       const locationData =
         street_address_number +
@@ -1681,10 +1688,10 @@ async function ListingCreate(req, res) {
         online_tour_2,
         agency_listing_url,
         inspection_times,
-        propertyImg,
-        florePlansImg,
-        frontPageImg,
-        statementOfInfo,
+        propertyImg: propertyImage,
+        florePlansImg: florImage,
+        frontPageImg: frontImage,
+        statementOfInfo: statementPdf,
       }).save();
 
       if (
@@ -1802,7 +1809,8 @@ async function listingView(req, res) {
 
 async function Listingedit(req, res) {
   try {
-    if (req.Data) {
+    console.log("req.data", req.body);
+    if (req.body) {
       var id = req.params.id;
       let {
         property_type,
@@ -1860,10 +1868,14 @@ async function Listingedit(req, res) {
         online_tour_2,
         agency_listing_url,
         inspection_times,
+        propertyImg,
+        florePlansImg,
+        statementOfInfo,
+        frontPageImg
       } = req.body;
 
-      let { propertyImg, florePlansImg, statementOfInfo, frontPageImg } =
-        req.files;
+      // let { propertyImg, florePlansImg, statementOfInfo, frontPageImg } =
+      //   req.files;
       // var data_id = await property_listing.findOne({ agency_id: req.Data });
       inspection_times;
 
@@ -1910,8 +1922,15 @@ async function Listingedit(req, res) {
         agentData.property_sold += 1;
         await agentData.save();
       }
-
-      if (req.files != [] || req.files != undefined) {
+      if (propertyImg != [] || propertyImg != undefined ||
+        florePlansImg != [] || florePlansImg != undefined ||
+        frontPageImg != [] || frontPageImg != undefined ||
+        statementOfInfo != [] || statementOfInfo != undefined
+      ) {
+        let propertyImage = JSON.parse(req.body.propertyImg);
+        let florImage = JSON.parse(req.body.florePlansImg);
+        let statementPdf = JSON.parse(req.body.statementOfInfo);
+        let frontImage = JSON.parse(req.body.frontPageImg);
         var arrayData = [];
         // console.log(typeof data);
 
@@ -1933,129 +1952,37 @@ async function Listingedit(req, res) {
         var arr = [];
         arr.push(doc);
 
-        for (da of arr) {
-          // console.log(da._id);
-        }
+        // for (da of arr) {
+        //   console.log(da._id);
+        // }
 
-        var first = da.propertyImg;
-        var second = doc.florePlansImg;
-        var third = doc.statementOfInfo;
-        var fourth = doc.frontPageImg;
+        // var first = da.propertyImg;
+        // var second = doc.florePlansImg;
+        // var third = doc.statementOfInfo;
+        // var fourth = doc.frontPageImg;
 
-        var firsts = [first];
-        var seconds = [second];
-        var thirds = [third];
-        var fourths = [fourth];
+        // var firsts = [first];
+        // var seconds = [second];
+        // var thirds = [third];
+        // var fourths = [fourth];
 
-        var firstsData = firsts.toString();
-        var secondsData = seconds.toString();
-        var thirdsData = thirds.toString();
-        var fourthsData = fourths.toString();
+        // var firstsData = firsts.toString();
+        // var secondsData = seconds.toString();
+        // var thirdsData = thirds.toString();
+        // var fourthsData = fourths.toString();
 
-        for (property of firsts) {
-          // console.log(property);
-        }
+        // for (property of firsts) {
+        //   // console.log(property);
+        // }
 
-        for (pro of property) {
-          // console.log(pro,"===============> final data");
-        }
+        // for (pro of property) {
+        //   // console.log(pro,"===============> final data");
+        // }
 
-        if (req.files.propertyImg != undefined) {
-          //  console.log(
-          //    "====== maro log ===================)))",
-          //    URL.createObjectURL(propertyImg)
-          //  );
-          for (const data of req.files.propertyImg) {
-            outsideImg = "uploads/property_image" + data.filename;
-
-            if (outsideImg) {
-              propertyImg = "uploads/property_image" + data.filename;
-              // fs.unlinkSync(path.join(__dirname, "..", "..", pro))
-            }
-            const data_ = await property_listing.findByIdAndUpdate(
-              id,
-              { propertyImg: outsideImg },
-              { new: true }
-            );
-            if (!data_)
-              return res
-                .status(HTTP.SUCCESS)
-                .send({
-                  status: false,
-                  code: HTTP.BAD_REQUEST,
-                  message: "Unable to update data!",
-                  data: {},
-                });
-          }
-        }
-
-        if (req.files.florePlansImg != undefined) {
-          for (const data of req.files.florePlansImg) {
-            florePlansImg = "uploads/property_image" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:642 ~ editBlog ~ outsideImg", florePlansImg)
-
-            if (secondsData) {
-              secondsData = "uploads/property_image" + data.filename;
-              // console.log("🚀 ~ file: blog.controller.js:118 ~ editBlog ~ filename_", filename_)
-              fs.unlinkSync(path.join(__dirname, "..", "..", secondsData));
-            }
-            const data_ = await property_listing.findByIdAndUpdate(
-              id,
-              { florePlansImg },
-              { new: true }
-            );
-            if (!data_)
-              return res
-                .status(HTTP.SUCCESS)
-                .send({
-                  status: false,
-                  code: HTTP.BAD_REQUEST,
-                  message: "Unable to update data!",
-                  data: {},
-                });
-          }
-        }
-
-        if (req.files.statementOfInfo != undefined) {
-          for (const data of req.files.statementOfInfo) {
-            statementOfInfo = "uploads/property_image" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:657 ~ editBlog ~ outsideImg", statementOfInfo)
-
-            if (thirdsData) {
-              thirdsData = "uploads/property_image" + data.filename;
-              // console.log("🚀 ~ file: blog.controller.js:118 ~ editBlog ~ filename_", filename_)
-              fs.unlinkSync(path.join(__dirname, "..", "..", fourthsData));
-            }
-            const data_ = await property_listing.findByIdAndUpdate(
-              id,
-              { statementOfInfo },
-              { new: true }
-            );
-            if (!data_)
-              return res
-                .status(HTTP.SUCCESS)
-                .send({
-                  status: false,
-                  code: HTTP.BAD_REQUEST,
-                  message: "Unable to update data!",
-                  data: {},
-                });
-          }
-        }
-
-        if (req.files.frontPageImg != undefined) {
-          for (const data of req.files.frontPageImg) {
-            var frontimg = "uploads/property_image" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:672 ~ editBlog ~ outsideImg", frontPageImg)
-          }
-          if (fourthsData) {
-            // var fourthsData = "uploads/property_image" + filename;
-            // console.log("🚀 ~ file: blog.controller.js:118 ~ editBlog ~ filename_", filename_)
-            // fs.unlinkSync(path.join(__dirname, "..", "..", fourthsData));
-          }
+        if (req.body.propertyImg != undefined) {
           const data_ = await property_listing.findByIdAndUpdate(
             id,
-            { frontPageImg: frontimg },
+            { propertyImg: propertyImage },
             { new: true }
           );
           if (!data_)
@@ -2068,7 +1995,54 @@ async function Listingedit(req, res) {
                 data: {},
               });
         }
-
+        if (req.body.florePlansImg != undefined) {
+          const data_ = await property_listing.findByIdAndUpdate(
+            id,
+            { florePlansImg: florImage },
+            { new: true }
+          );
+          if (!data_)
+            return res
+              .status(HTTP.SUCCESS)
+              .send({
+                status: false,
+                code: HTTP.BAD_REQUEST,
+                message: "Unable to update data!",
+                data: {},
+              });
+        }
+        if (req.body.statementOfInfo != undefined) {
+          const data_ = await property_listing.findByIdAndUpdate(
+            id,
+            { statementOfInfo: statementPdf },
+            { new: true }
+          );
+          if (!data_)
+            return res
+              .status(HTTP.SUCCESS)
+              .send({
+                status: false,
+                code: HTTP.BAD_REQUEST,
+                message: "Unable to update data!",
+                data: {},
+              });
+        }
+        if (req.body.frontPageImg != undefined) {
+          const data_ = await property_listing.findByIdAndUpdate(
+            id,
+            { frontPageImg: frontImage },
+            { new: true }
+          );
+          if (!data_)
+            return res
+              .status(HTTP.SUCCESS)
+              .send({
+                status: false,
+                code: HTTP.BAD_REQUEST,
+                message: "Unable to update data!",
+                data: {},
+              });
+        }
         const updateData = await property_listing.findByIdAndUpdate(id, {
           property_type,
           listing_type,
@@ -2128,7 +2102,7 @@ async function Listingedit(req, res) {
           online_tour_2,
           agency_listing_url,
           inspection_times,
-        });
+        }, { new: true });
 
         if (updateData) {
           return res

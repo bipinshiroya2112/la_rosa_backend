@@ -36,9 +36,9 @@ router.post('/admin/Agent/edit/:id', authagency, agent_img.fields([{ name: "prof
 router.post('/admin/Agent/delete/:id', authagency, adminController.agentDelete);
 
 //=========================  page :- 5 =========================
-router.post('/admin/Listing/create', property_upload, authagency, adminController.ListingCreate);
+router.post('/admin/Listing/create', upload, authagency, adminController.ListingCreate);
 router.post('/admin/Listing/view/:id', authagency, adminController.listingView);
-router.post('/admin/Listing/edit/:id', property_upload, authagency, adminController.Listingedit);
+router.post('/admin/Listing/edit/:id', upload, authagency, adminController.Listingedit);
 router.post('/admin/Listing/delete/:id', authagency, adminController.propertyDelete);
 
 //=============================== user ============================

@@ -54,7 +54,7 @@ app.post("/api/image/upload", upload.fields({}), async (req, res) => {
       onBeforeGenerateToken: async (pathname) => {
         console.log('Generating upload token for:', pathname);
         return {
-          allowedContentTypes: ['image/jpeg', 'image/png', 'image/gif'],
+          allowedContentTypes: ['application/pdf', 'image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/jpg'],
           tokenPayload: JSON.stringify({}),
         };
       },
