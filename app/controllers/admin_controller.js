@@ -1922,15 +1922,14 @@ async function Listingedit(req, res) {
         agentData.property_sold += 1;
         await agentData.save();
       }
-      if (propertyImg != [] || propertyImg != undefined ||
-        florePlansImg != [] || florePlansImg != undefined ||
-        frontPageImg != [] || frontPageImg != undefined ||
-        statementOfInfo != [] || statementOfInfo != undefined
-      ) {
-        let propertyImage = JSON.parse(req.body.propertyImg);
-        let florImage = JSON.parse(req.body.florePlansImg);
-        let statementPdf = JSON.parse(req.body.statementOfInfo);
-        let frontImage = JSON.parse(req.body.frontPageImg);
+      let propertyImage = JSON.parse(req.body.propertyImg);
+      let florImage = JSON.parse(req.body.florePlansImg);
+      let statementPdf = JSON.parse(req.body.statementOfInfo);
+      let frontImage = JSON.parse(req.body.frontPageImg);
+
+      if (propertyImage.length > 0 || florImage.length > 0 ||
+        statementPdf.length > 0 || frontImage.length > 0) {
+        console.log("image update success")
         var arrayData = [];
         // console.log(typeof data);
 
@@ -1979,7 +1978,7 @@ async function Listingedit(req, res) {
         //   // console.log(pro,"===============> final data");
         // }
 
-        if (req.body.propertyImg != undefined) {
+        if (propertyImg.length > 0) {
           const data_ = await property_listing.findByIdAndUpdate(
             id,
             { propertyImg: propertyImage },
@@ -1995,7 +1994,7 @@ async function Listingedit(req, res) {
                 data: {},
               });
         }
-        if (req.body.florePlansImg != undefined) {
+        if (florImage.length > 0) {
           const data_ = await property_listing.findByIdAndUpdate(
             id,
             { florePlansImg: florImage },
@@ -2011,7 +2010,7 @@ async function Listingedit(req, res) {
                 data: {},
               });
         }
-        if (req.body.statementOfInfo != undefined) {
+        if (statementPdf.length > 0) {
           const data_ = await property_listing.findByIdAndUpdate(
             id,
             { statementOfInfo: statementPdf },
@@ -2027,7 +2026,9 @@ async function Listingedit(req, res) {
                 data: {},
               });
         }
-        if (req.body.frontPageImg != undefined) {
+        if (frontImage.length > 0) {
+          console.log("image front update success")
+
           const data_ = await property_listing.findByIdAndUpdate(
             id,
             { frontPageImg: frontImage },
@@ -2105,6 +2106,7 @@ async function Listingedit(req, res) {
         }, { new: true });
 
         if (updateData) {
+          console.log("updateData", updateData)
           return res
             .status(HTTP.SUCCESS)
             .send({
@@ -2114,81 +2116,66 @@ async function Listingedit(req, res) {
             });
         }
       } else {
-        await property_listing.findById(id, async function (err, doc) {
-          if (
-            !propertyImg ||
-            !florePlansImg ||
-            !statementOfInfo ||
-            !frontPageImg
-          ) {
-            let propertyImg = doc.propertyImg;
-            let florePlansImg = doc.florePlansImg;
-            let statementOfInfo = doc.statementOfInfo;
-            let frontPageImg = doc.frontPageImg;
-
-            property_listing.findByIdAndUpdate(id, {
-              property_type,
-              listing_type,
-              status,
-              new_or_established_checked,
-              lead_agent,
-              authority,
-              price,
-              price_display,
-              price_display_checked,
-              name,
-              email,
-              phone_number,
-              unit,
-              street_address_number,
-              street_address_name,
-              suburb,
-              municipality,
-              auction_result,
-              maximum_bid,
-              Bedrooms,
-              Bathrooms,
-              Ensuites,
-              toilets,
-              garage_spaces,
-              carport_spaces,
-              open_spaces,
-              energy_efficiensy_rating,
-              living_areas,
-              house_size,
-              house_size_square,
-              land_size,
-              land_size_square,
-              other_features,
-
-              established_property,
-              new_construction,
-              show_actual_price,
-              show_text_instead_of_price,
-              Hide_the_price_and_display_contact_agent,
-              send_vendor_the_property_live_email_when_listing_is_published,
-              send_vendor_a_weekly_campaign_activity_report_email,
-              hide_street_address_on_listing,
-              hide_street_view,
-              outdoor_features,
-              indoor_features,
-              climate_energy,
-              heating_cooling,
-              eco_friendly,
-            }),
-              { new: true },
-              async function (err, docs) {
-                return res
-                  .status(HTTP.SUCCESS)
-                  .send({
-                    status: true,
-                    code: HTTP.SUCCESS,
-                    message: "Property updated",
-                    data: await docs,
-                  });
-              };
-          }
-        });
+        console.log("image not update")
+        const updateData = await property_listing.findByIdAndUpdate(id, {
+          property_type,
+          listing_type,
+          status,
+          new_or_established_checked,
+          lead_agent,
+          authority,
+          price,
+          price_display,
+          price_display_checked,
+          name,
+          email,
+          phone_number,
+          unit,
+          street_address_number,
+          street_address_name,
+          suburb,
+          municipality,
+          auction_result,
+          maximum_bid,
+          Bedrooms,
+          Bathrooms,
+          Ensuites,
+          toilets,
+          garage_spaces,
+          carport_spaces,
+          open_spaces,
+          energy_efficiensy_rating,
+          living_areas,
+          house_size,
+          house_size_square,
+          land_size,
+          land_size_square,
+          other_features,
+          established_property,
+          new_construction,
+          show_actual_price,
+          show_text_instead_of_price,
+          Hide_the_price_and_display_contact_agent,
+          send_vendor_the_property_live_email_when_listing_is_published,
+          send_vendor_a_weekly_campaign_activity_report_email,
+          hide_street_address_on_listing,
+          hide_street_view,
+          outdoor_features,
+          indoor_features,
+          climate_energy,
+          heating_cooling,
+          eco_friendly,
+        },
+          { new: true });
+        if (updateData) {
+          return res
+            .status(HTTP.SUCCESS)
+            .send({
+              status: true,
+              code: HTTP.SUCCESS,
+              message: "Profile update",
+            });
+        }
       }
     } else {
       return res

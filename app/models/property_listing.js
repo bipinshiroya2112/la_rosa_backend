@@ -12,7 +12,7 @@ const propertySchema = new Schema(
       default: "property",
     },
     listing_type: {
-      type : String
+      type: String
     },
     property_type: {
       type: String,
@@ -124,7 +124,7 @@ const propertySchema = new Schema(
       type: Boolean,
     },
     price_display_checked: {
-      type : String
+      type: String
     },
     Hide_the_price_and_display_contact_agent: {
       type: Boolean,
@@ -142,11 +142,11 @@ const propertySchema = new Schema(
       type: Boolean,
     },
     outdoor_features: {
-    type : Array
+      type: Array
     },
     indoor_features: {
       type: Array
-     },
+    },
     heating_cooling: {
       type: Array,
     },
@@ -189,17 +189,17 @@ const propertySchema = new Schema(
     inspection_times: {
       type: Array,
     },
-    agent_delet_key:{
-      type :Boolean,
-      default : true
+    agent_delet_key: {
+      type: Boolean,
+      default: true
     },
     location: {
-      type: {type : String, required: true},
-      coordinates : []
+      type: { type: String, required: true },
+      coordinates: []
     }
   },
   { timestamps: true }
 );
-propertySchema.index({location : "2dsphere"})
+propertySchema.index({ location: "2dsphere" })
 const property_listing = mongoose.model("property_listing", propertySchema);
 module.exports = property_listing;
