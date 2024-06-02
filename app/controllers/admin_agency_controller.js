@@ -1740,10 +1740,9 @@ async function agencyDelete(req, res) {
 async function Agency_Branding_Update(req, res) {
   var id = req.Data;
   try {
-    const { secondary_color, primary_color, text_color } = req.body;
+    const { secondary_color, primary_color, text_color, heroImg, agencyLargeLogo, agencyMediumLogo, agencySmallLogo } = req.body;
     console.log("-------------- branding body ----------->> ", req.body);
     await Register.findById(id, async function (err, doc) {
-      // console.log("🚀 ~ file: admin_agency_controller.js:491 ~ doc:", doc)
       if (secondary_color || primary_color || text_color) {
         await Register.findByIdAndUpdate(
           doc.id,
@@ -1755,132 +1754,41 @@ async function Agency_Branding_Update(req, res) {
           { new: true }
         );
       }
-      if (req.files.agencySmallLogo) {
-        if (req.files.agencySmallLogo !== null) {
-          console.log(doc, "-------------------->");
-          if (doc.agencySmallLogo) {
-            fs.unlinkSync(
-              path.join(__dirname, "..", "..", doc.agencySmallLogo)
-            );
-          }
-          for (data of req.files.agencySmallLogo) {
-            agencySmallLogo = "uploads/agency_image/" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:556 ~ editBlog ~ outsideImg", agencySmallLogo);
-            await Register.findByIdAndUpdate(
-              doc.id,
-              { agencySmallLogo: agencySmallLogo },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          // console.log(doc, "--------------------><------------------------");
-          var imagePath = "";
-          if (doc.agencySmallLogo) {
-            imagePath = doc.agencySmallLogo;
-          }
-          for (data of req.files.agencySmallLogo) {
-            await Register.findByIdAndUpdate(
-              id,
-              { agencySmallLogo: imagePath },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
+      if (req.body.agencySmallLogo != 'undefined') {
+        await Register.findByIdAndUpdate(
+          doc.id,
+          {
+            agencySmallLogo: agencySmallLogo,
+          },
+          { new: true }
+        );
       }
-      if (req.files.agencyMediumLogo) {
-        if (req.files.agencyMediumLogo !== null) {
-          // console.log(doc.agencySmallLogo, "-------------------->123");
-          if (doc.agencyMediumLogo) {
-            fs.unlinkSync(
-              path.join(__dirname, "..", "..", doc.agencyMediumLogo)
-            );
-          }
-          for (data of req.files.agencyMediumLogo) {
-            agencyMediumLogo = "uploads/agency_image/" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:589 ~ editBlog ~ outsideImg", agencyMediumLogo);
-            await Register.findByIdAndUpdate(
-              doc.id,
-              { agencyMediumLogo: agencyMediumLogo },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          // console.log(doc, "--------------------><--------------------");
-          var imagePath = "";
-          if (doc.agencyMediumLogo) {
-            imagePath = doc.agencyMediumLogo;
-          }
-          for (data of req.files.agencyMediumLogo) {
-            await Register.findByIdAndUpdate(
-              id,
-              { agencyMediumLogo: imagePath },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
+      if (req.body.agencyMediumLogo != 'undefined') {
+        await Register.findByIdAndUpdate(
+          doc.id,
+          {
+            agencyMediumLogo: agencyMediumLogo,
+          },
+          { new: true }
+        );
       }
-
-      if (req.files.agencyLargeLogo) {
-        if (req.files.agencyLargeLogo !== null) {
-          // console.log(doc, "-------------------->");
-          if (doc.agencyLargeLogo) {
-            fs.unlinkSync(
-              path.join(__dirname, "..", "..", doc.agencyLargeLogo)
-            );
-          }
-          for (data of req.files.agencyLargeLogo) {
-            agencyLargeLogo = "uploads/agency_image/" + data.filename;
-            // console.log("🚀 ~ file: blog.controller.js:621 ~ editBlog ~ outsideImg", agencyLargeLogo);
-            await Register.findByIdAndUpdate(
-              id,
-              { agencyLargeLogo: agencyLargeLogo },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          // console.log(doc, "-------------------->");
-          var imagePath = "";
-          if (doc.agencyLargeLogo) {
-            imagePath = doc.agencyLargeLogo;
-          }
-          for (data of req.files.agencyLargeLogo) {
-            await Register.findByIdAndUpdate(
-              id,
-              { agencyLargeLogo: imagePath },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
+      if (req.body.agencyLargeLogo != 'undefined') {
+        await Register.findByIdAndUpdate(
+          doc.id,
+          {
+            agencyLargeLogo: agencyLargeLogo,
+          },
+          { new: true }
+        );
+      }
+      if (req.body.heroImg != 'undefined') {
+        await Register.findByIdAndUpdate(
+          doc.id,
+          {
+            heroImg: heroImg,
+          },
+          { new: true }
+        );
       }
       if (req.files.commercialAgencySmallLogo) {
         if (req.files.commercialAgencySmallLogo !== null) {
@@ -2055,46 +1963,6 @@ async function Agency_Branding_Update(req, res) {
           }
         }
       }
-      if (req.files.heroImg) {
-        if (req.files.heroImg !== null) {
-          // console.log(doc, "-------------------->");
-          if (doc.heroImg) {
-            fs.unlinkSync(path.join(__dirname, "..", "..", doc.heroImg));
-          }
-          for (data of req.files.heroImg) {
-            heroImg = "uploads/agency_image/" + data.filename;
-            await Register.findByIdAndUpdate(
-              id,
-              { heroImg: heroImg },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        } else {
-          // console.log(doc, "-------------------->");
-          var imagePath = "";
-          if (doc.heroImg) {
-            imagePath = doc.heroImg;
-          }
-          for (data of req.files.heroImg) {
-            await Register.findByIdAndUpdate(
-              id,
-              { heroImg: imagePath },
-              { new: true }
-            ),
-              function (err, docs) {
-                if (err) {
-                  console.log(err);
-                }
-              };
-          }
-        }
-      }
-
       return res.status(HTTP.SUCCESS).send({
         status: true,
         code: HTTP.SUCCESS,
