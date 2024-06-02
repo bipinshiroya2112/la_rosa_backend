@@ -1809,7 +1809,7 @@ async function listingView(req, res) {
 
 async function Listingedit(req, res) {
   try {
-    if (req.data) {
+    if (req.body) {
       var id = req.params.id;
       let {
         property_type,
