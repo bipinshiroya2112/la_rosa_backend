@@ -27,7 +27,7 @@ function verifyToken(req, res, next) {
           data: {},
         });
       } else {
-       
+
         const { sessionId } = decoded.result;
 
         if (!sessionId || !ObjectId.isValid(sessionId)) {
@@ -185,7 +185,7 @@ function authUser(req, res, next) {
 
 function authagency(req, res, next) {
 
-  const decodedToken = jwt.decode( req.headers.authorization, { complete: true });
+  const decodedToken = jwt.decode(req.headers.authorization, { complete: true });
 
   if (!decodedToken) {
     console.log("error from authagency");
@@ -201,7 +201,7 @@ function authagency(req, res, next) {
 function auth(req, res, next) {
 
   bearer = req.headers.authorization.slice(7);
-  
+
   const decodedToken = jwt.verify(bearer, process.env.JWT_SECRET, { complete: true });
 
   if (!decodedToken) {

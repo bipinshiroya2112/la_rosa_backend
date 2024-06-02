@@ -1809,8 +1809,7 @@ async function listingView(req, res) {
 
 async function Listingedit(req, res) {
   try {
-    console.log("req.data", req.body);
-    if (req.body) {
+    if (req.data) {
       var id = req.params.id;
       let {
         property_type,
@@ -2027,8 +2026,6 @@ async function Listingedit(req, res) {
               });
         }
         if (frontImage.length > 0) {
-          console.log("image front update success")
-
           const data_ = await property_listing.findByIdAndUpdate(
             id,
             { frontPageImg: frontImage },
