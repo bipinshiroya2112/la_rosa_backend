@@ -73,7 +73,7 @@ async function ViewAllAgency(req, res) {
         });
         // console.log("🚀 ~ file: admin_controller.js:45 ~ ViewAllAgency ~ data:", data)
       }
-
+      data.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res
         .status(HTTP.SUCCESS)
         .send({
@@ -111,7 +111,7 @@ async function ViewAllAgent(req, res) {
       let lead_agent = await admin_agent.find({ role: "agent" });
 
       // Create a new object with the response data
-
+      lead_agent.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res
         .status(HTTP.SUCCESS)
         .send({
@@ -152,7 +152,7 @@ async function ViewAllproperty(req, res) {
           path: "lead_agent",
           select: "first_name last_name"
         });
-      // console.log("🚀 ~ file: admin_controller.js:80 ~ ViewAllproperty ~ property_data:", property_data)
+      property_data.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res
         .status(HTTP.SUCCESS)
         .send({
@@ -2241,9 +2241,10 @@ async function viewallUser(req, res) {
           email: data.email,
           role: data.role,
           isActive: data.isActive,
+          createdAt: data.createdAt
         });
       }
-
+      arr.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res
         .status(HTTP.SUCCESS)
         .send({

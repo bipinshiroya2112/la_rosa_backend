@@ -1039,7 +1039,7 @@ async function propertyUpdate(req, res) {
 
 async function viewAgencyProperty(req, res) {
   try {
-    let formattedpropertyData = [];
+    let filterPropertyList = [];
 
     const id = req.Data;
 
@@ -1070,7 +1070,7 @@ async function viewAgencyProperty(req, res) {
     }
 
     for (const data of properties) {
-      formattedpropertyData.push({
+      filterPropertyList.push({
         lead_agent: data.lead_agent,
         price: data.price,
         Bedrooms: data.Bedrooms,
@@ -1089,11 +1089,13 @@ async function viewAgencyProperty(req, res) {
       });
     }
 
+    filterPropertyList.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
       message: "Property details.",
-      data: formattedpropertyData,
+      data: filterPropertyList,
     });
   } catch (err) {
     console.log(err);
@@ -1190,9 +1192,10 @@ async function viewAllProperty(req, res) {
         status: data.status,
         inspection_time: data.inspection_time,
         agencyLogo: data.agency_id.agencyMediumLogo,
+        createdAt: data.createdAt
       });
     }
-
+    listings.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
@@ -1215,6 +1218,7 @@ async function viewAllProperty(req, res) {
 const getPropertyDetails = async (req, res) => {
   try {
     let listings = await sendPropertyDetail.find({ agent_id: req.Data })
+    listings.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,

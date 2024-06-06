@@ -1294,11 +1294,12 @@ async function savedProperty(req, res) {
             carCount: _data.carport_spaces,
             isFavorite: true,
             location: _data.location,
+            createdAt: _data.createdAt
           });
         }
       }
     }
-
+    result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     // console.log("----------RESULT----------------->>>>>>>>>", result.length);
     return res.status(HTTP.SUCCESS).send({
       status: true,

@@ -1685,9 +1685,10 @@ async function viewAllAgency(req, res) {
         secondary_color: data.secondary_color,
         primary_color: data.primary_color,
         text_color: data.text_color,
+        createdAt: data.createdAt
       });
     }
-
+    formattedAgencyData.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
@@ -2511,6 +2512,7 @@ async function viewAllAgentsOfAgency(req, res) {
         id: data._id,
       });
     }
+    agentsData.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
 
     return res.status(HTTP.SUCCESS).send({
       status: true,
@@ -2695,6 +2697,7 @@ async function viewAllAgents(req, res) {
     // ])
     // console.log("🚀 ~ viewAllAgents ~ formattedUserData:", formattedUserData)
     const totalSoldCount = await property_listing.find({ status: "Sold" });
+    formattedUserData.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
