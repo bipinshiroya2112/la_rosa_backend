@@ -1,5 +1,6 @@
 require('dotenv').config({ path: './config/.env' })
-require('./config/mongodb')
+const DB = require("./config/mongodb");
+DB.connect();
 const express = require("express");
 const http = require('http');
 const cookieParser = require("cookie-parser");
