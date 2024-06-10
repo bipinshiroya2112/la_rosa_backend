@@ -16,6 +16,7 @@ const multer = require('multer');
 const upload = multer();
 const vercel = require('@vercel/blob/client');
 
+app.use(cors());
 // dtQcltpZHeYY1pkQCu6XRoqfWsDDu9QbY3NQ1Lb8YMF9xP-FMlI-qBJ7WZxXxlFl0Z4
 
 var mung = require('express-mung');
@@ -35,7 +36,6 @@ app.use('/uploads', express.static('uploads'));
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json());
 
-app.use(cors({ credentials: true, origin: true }));
 
 
 

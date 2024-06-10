@@ -1460,7 +1460,6 @@ async function agentSetpassword(req, res) {
 
 async function agencyViewProfile(req, res) {
   var id = req.Data;
-
   if (req.body.role == "agency") {
     Register.findById(id, async function (err, doc) {
       try {
@@ -1489,8 +1488,8 @@ async function agencyViewProfile(req, res) {
     });
   }
   if (req.body.role == "agent") {
-    const ObjectId = mongoose.Types.ObjectId;
-    const idObject = ObjectId(id);
+    const objectId = mongoose.Types.ObjectId;
+    const idObject = new objectId(id);
     const agent = await admin_agent.aggregate([
       {
         $match: { _id: idObject },
@@ -1504,7 +1503,6 @@ async function agencyViewProfile(req, res) {
         },
       },
     ]);
-
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
