@@ -1266,7 +1266,7 @@ async function addToFavorites(req, res) {
 
 async function savedProperty(req, res) {
   try {
-    const _id = ObjectId(req.user._id).toString();
+    const _id = req.user._id;
     const user = await Register.findById({ _id });
     // console.log("--------->", user);
 
