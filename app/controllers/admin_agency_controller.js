@@ -1520,7 +1520,7 @@ async function agencyViewProfile_U(req, res) {
 
   try {
     const ObjectId = mongoose.Types.ObjectId;
-    const idObject = ObjectId(id);
+    const idObject = new ObjectId(id);
     // console.log("🚀 ~ agencyViewProfile_U ~ idObject:", idObject)
 
     const result = await Register.aggregate([
@@ -2201,7 +2201,7 @@ async function agentViewProfile(req, res) {
   var id = req.body.id;
   console.log(req.body, "agentViewprofile----||");
   const ObjectId = mongoose.Types.ObjectId;
-  const idObject = ObjectId(id);
+  const idObject = new ObjectId(id);
   console.log("🚀 ~ agentViewProfile ~ idObject:", idObject);
 
   try {

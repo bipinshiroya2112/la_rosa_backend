@@ -1,4 +1,4 @@
-// require('dotenv').config()
+require('dotenv').config()
 const mongoose = require('mongoose');
 // mongoose.set('strictQuery', true)
 // const MONGODB = process.env.MONGODB
@@ -24,19 +24,14 @@ const mongoose = require('mongoose');
 
 // mongoose.set('debug', true);
 
-require("dotenv").config();
 const MONGODB = process.env.MONGODB;
-
 async function connect() {
     try {
         mongoose
             .connect(`${MONGODB}/larosaBackend`, {
-                useNewUrlParser: true,
-                useUnifiedTopology: true,
                 serverSelectionTimeoutMS: 30000,
                 socketTimeoutMS: 45000,
                 connectTimeoutMS: 30000,
-                bufferCommands: false
             })
             .then((req, res) => {
                 console.log("Database connected successfully!!");

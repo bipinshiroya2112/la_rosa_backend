@@ -223,7 +223,7 @@ async function agentReview(req, res) {
   try {
     let id = req.params.id;
     const ObjectId = mongoose.Types.ObjectId;
-    const user_id = ObjectId(id);
+    const user_id = new ObjectId(id);
 
     const {
       star,
@@ -1111,7 +1111,9 @@ async function viewAgencyProperty(req, res) {
 
 async function propertyByAgency(req, res) {
   try {
-    var id = mongoose.Types.ObjectId(req.body.id);
+    const objectId = mongoose.Types.ObjectId;
+    var id = new objectId(req.body.id);
+    // var id = mongoose.Types.ObjectId(req.body.id);
 
     const properties = await property_listing.find({ agency_id: id });
 
