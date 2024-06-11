@@ -1714,7 +1714,7 @@ const contact_us = async (req, res) => {
 
 async function propaties(req, res) {
   try {
-    let data = await property_listing.find().sort({ _id: -1 }).limit(5);
+    let data = await property_listing.find().sort({ _id: -1 });
     let formated = [];
 
     for (d of data) {
