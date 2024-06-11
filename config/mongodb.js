@@ -29,7 +29,7 @@ async function connect() {
     console.log("mongodb url::>>>>", MONGODB)
     try {
         mongoose
-            .connect(`${MONGODB}/larosaBackend`, {
+            .connect(`${MONGODB}/larosaBackend?retryWrites=true&w=majority`, {
                 keepAlive: 1,
                 useNewUrlParser: true,
                 useFindAndModify: false,
