@@ -37,7 +37,7 @@ async function connect() {
             console.log(`MongoDB established`);
         });
         mongoose
-            .connect(`mongodb+srv://testac1313:pradip@cluster0.zqyjlea.mongodb.net/?retryWrites=true&w=majority`, {
+            .connect(`mongodb+srv://testac1313:pradip@cluster0.zqyjlea.mongodb.net/test?retryWrites=true&w=majority`, {
                 bufferCommands: true
             })
             .then((req, res) => {
