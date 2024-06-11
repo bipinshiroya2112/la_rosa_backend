@@ -30,7 +30,14 @@ const MONGODB = process.env.MONGODB;
 async function connect() {
     try {
         mongoose
-            .connect(`${MONGODB}/larosaBackend`)
+            .connect(`${MONGODB}/larosaBackend`, {
+                useNewUrlParser: true,
+                useUnifiedTopology: true,
+                serverSelectionTimeoutMS: 30000,
+                socketTimeoutMS: 45000,
+                connectTimeoutMS: 30000,
+                bufferCommands: false
+            })
             .then((req, res) => {
                 console.log("Database connected successfully!!");
             })
