@@ -26,15 +26,19 @@ const mongoose = require('mongoose');
 
 const MONGODB = process.env.MONGODB;
 async function connect() {
-    console.log("mongodb url::>>>>", MONGODB)
     try {
+        console.log("MONGODB================", MONGODB);
+        mongoose.connection.on('error', (err) => {
+            console.error(`MongoDB connection error: `, err);
+            process.exit(-1);
+        });
+
+        mongoose.connection.on('connection', () => {
+            console.log(`MongoDB established`);
+        });
         mongoose
-            .connect(`mongodb+srv://test:test@cluster0.fbr38dy.mongodb.net/larosaBackend?retryWrites=true&w=majority`, {
-                keepAlive: 1,
-                useNewUrlParser: true,
-                useFindAndModify: false,
-                useUnifiedTopology: true,
-                useCreateIndex: true
+            .connect(`mongodb+srv://testac1313:pradip@cluster0.zqyjlea.mongodb.net/?retryWrites=true&w=majority`, {
+                bufferCommands: true
             })
             .then((req, res) => {
                 console.log("Database connected successfully!!");
@@ -44,7 +48,7 @@ async function connect() {
             });
     } catch (error) {
         console.error("Error connecting to MongoDB:", error);
-        throw error;
+        process.exit(-1);
     }
 }
 
