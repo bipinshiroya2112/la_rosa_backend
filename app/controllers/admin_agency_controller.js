@@ -2581,12 +2581,12 @@ async function viewAllAgents(req, res) {
     let formattedUserData = [];
     var key = req.params.key;
     // console.log("🚀 ~ viewAllAgents ~ key:", key)
-
+    var usersData;
     if (key == "undefined") {
-      var usersData = await admin_agent.find({}).populate("agency_id");
+      usersData = await admin_agent.find({}).populate("agency_id");
       // console.log("🚀 ~ viewAllAgents ~ usersData:", usersData)
     } else {
-      var usersData = await admin_agent
+      usersData = await admin_agent
         .find({
           $or: [
             { name: { $regex: req.params.key, $options: "i" } },
