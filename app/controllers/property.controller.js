@@ -1073,6 +1073,8 @@ async function viewAgencyProperty(req, res) {
       filterPropertyList.push({
         lead_agent: data.lead_agent,
         price: data.price,
+        price_display_checked: data.price_display_checked,
+        price_display: data.price_display,
         Bedrooms: data.Bedrooms,
         Bathrooms: data.Bathrooms,
         garage_spaces: data.garage_spaces,
@@ -1180,6 +1182,8 @@ async function viewAllProperty(req, res) {
       listings.push({
         lead_agent: agentData,
         price: data.price,
+        price_display_checked: data.price_display_checked,
+        price_display: data.price_display,
         Bedrooms: data.Bedrooms,
         Bathrooms: data.Bathrooms,
         carport_spaces: data.carport_spaces,

@@ -34,7 +34,7 @@ const propertySchema = new Schema(
       type: Number,
     },
     price_display: {
-      type: Number,
+      type: String,
     },
     price_display_checked: {
       type: String,

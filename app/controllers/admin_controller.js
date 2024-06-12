@@ -1510,7 +1510,7 @@ async function ListingCreate(req, res) {
         house_size_square,
         land_size,
         land_size_square,
-        other_features,
+        // other_features,
 
         established_property,
         new_construction,
@@ -1556,12 +1556,12 @@ async function ListingCreate(req, res) {
       }
 
       if (
-        !Bedrooms ||
-        !Bathrooms ||
+        // !Bedrooms ||
+        // !Bathrooms ||
+        // !price ||
         !property_type ||
         !new_or_established_checked ||
-        !lead_agent ||
-        !price
+        !lead_agent
       ) {
         return res
           .status(HTTP.SUCCESS)
@@ -1664,7 +1664,7 @@ async function ListingCreate(req, res) {
         house_size_square,
         land_size,
         land_size_square,
-        other_features,
+        // other_features,
 
         established_property,
         new_construction,
@@ -1844,7 +1844,7 @@ async function Listingedit(req, res) {
         house_size_square,
         land_size,
         land_size_square,
-        other_features,
+        // other_features,
 
         established_property,
         new_construction,
@@ -2078,7 +2078,7 @@ async function Listingedit(req, res) {
           house_size_square,
           land_size,
           land_size_square,
-          other_features,
+          // other_features,
           established_property,
           new_construction,
           show_actual_price,
@@ -2147,7 +2147,7 @@ async function Listingedit(req, res) {
           house_size_square,
           land_size,
           land_size_square,
-          other_features,
+          // other_features,
           established_property,
           new_construction,
           show_actual_price,
