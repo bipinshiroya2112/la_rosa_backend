@@ -1163,7 +1163,6 @@ async function viewAllProperty(req, res) {
     let search = await property_listing
       .find({ $and: [{ status: req.body.status }, { agent_delet_key: true }] })
       .populate("agency_id");
-    console.log(search);
     if (search.length == 0)
       return res.status(HTTP.SUCCESS).send({
         status: false,
