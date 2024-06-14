@@ -47,7 +47,6 @@ router.post("/verifyMail", authUser, userControllers.verifyMail);
 // =================== Property Details===================================
 
 router.post("/sendPropertyDetails", propertyControllers.sendPropertyDetails);
-router.get("/get/enquiries", authagency, propertyControllers.getEnquiries);
 router.post("/agentReview/:id", propertyControllers.agentReview);
 router.post("/agencyReview", propertyControllers.agencyReview);
 router.post("/sendEnquiry", authUser, propertyControllers.sendEnquiry);
@@ -56,6 +55,9 @@ router.post("/addToFavorites", authUser, userControllers.addToFavorites);
 router.post("/savedProperty", authUser, userControllers.savedProperty);
 
 router.get("/inspection", userControllers.inspection);
+
+router.get("/get/enquiries", authagency, propertyControllers.getEnquiries);
+router.get("/get/appraisal", authagency, propertyControllers.getAppraisal);
 
 router.post("/SaveSearch", auth, userControllers.SaveSearch);
 router.post("/SearchShow", auth, userControllers.SearchShow);

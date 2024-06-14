@@ -1241,6 +1241,27 @@ const getEnquiries = async (req, res) => {
     });
   }
 }
+//==================================================================================
+const getAppraisal = async (req, res) => {
+  try {
+    let listings = await sendPropertyDetail.find({ agent_id: req.Data });
+    listings.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+    return res.status(HTTP.SUCCESS).send({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Enquiries details.",
+      data: listings,
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(HTTP.SUCCESS).send({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      message: "Something went wrong!",
+      data: {},
+    });
+  }
+}
 //===============================================================================================================================================================================
 
 module.exports = {
@@ -1256,5 +1277,6 @@ module.exports = {
   propertyByAgency,
   propertyUpdate,
   viewAllProperty,
-  getEnquiries
+  getEnquiries,
+  getAppraisal
 };
