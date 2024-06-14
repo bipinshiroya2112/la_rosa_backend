@@ -1555,10 +1555,21 @@ async function ListingCreate(req, res) {
           });
       }
 
+      if (price_display_checked == 'show_text_instead_of_price' && price_display.length == 0) {
+        return res
+          .status(HTTP.SUCCESS)
+          .send({
+            status: false,
+            code: HTTP.NOT_FOUND,
+            message: "Please enter display details.",
+            data: {},
+          });
+      }
+
       if (
         // !Bedrooms ||
         // !Bathrooms ||
-        // !price ||
+        !price ||
         !property_type ||
         !new_or_established_checked ||
         !lead_agent
@@ -1880,6 +1891,17 @@ async function Listingedit(req, res) {
 
       // let agent = JSON.parse(lead_agent)
       // console.log("🚀 ~ Listingedit ~ agent:",lead_agent)
+
+      if (price_display_checked == 'show_text_instead_of_price' && price_display.length == 0) {
+        return res
+          .status(HTTP.SUCCESS)
+          .send({
+            status: false,
+            code: HTTP.NOT_FOUND,
+            message: "Please enter display details.",
+            data: {},
+          });
+      }
 
       if (!lead_agent) {
         return res
