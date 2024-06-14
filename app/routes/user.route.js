@@ -47,7 +47,7 @@ router.post("/verifyMail", authUser, userControllers.verifyMail);
 // =================== Property Details===================================
 
 router.post("/sendPropertyDetails", propertyControllers.sendPropertyDetails);
-router.get("/get/propertyDetails", authagency, propertyControllers.getPropertyDetails);
+router.get("/get/enquiries", authagency, propertyControllers.getEnquiries);
 router.post("/agentReview/:id", propertyControllers.agentReview);
 router.post("/agencyReview", propertyControllers.agencyReview);
 router.post("/sendEnquiry", authUser, propertyControllers.sendEnquiry);

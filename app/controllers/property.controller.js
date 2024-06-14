@@ -1221,14 +1221,14 @@ async function viewAllProperty(req, res) {
 
 
 //==================================================================================
-const getPropertyDetails = async (req, res) => {
+const getEnquiries = async (req, res) => {
   try {
-    let listings = await sendPropertyDetail.find({ agent_id: req.Data })
+    let listings = await sendEnquirys.find({ agent_id: req.Data });
     listings.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
-      message: "Appraisal details.",
+      message: "Enquiries details.",
       data: listings,
     });
   } catch (err) {
@@ -1256,5 +1256,5 @@ module.exports = {
   propertyByAgency,
   propertyUpdate,
   viewAllProperty,
-  getPropertyDetails
+  getEnquiries
 };
