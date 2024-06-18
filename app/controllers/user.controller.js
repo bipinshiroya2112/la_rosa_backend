@@ -1750,28 +1750,41 @@ async function propaties(req, res) {
   }
 }
 
-async function latestagent(req, res) {
+async function latestAgent(req, res) {
   try {
-    let data = await admin_agent.find().sort({ _id: -1 }).limit(5);
-    let allagent = [];
-    for (d of data) {
-      // let formated = [];
-      const propatys = await property_listing.find({ lead_agent: d._id });
-      // for (s of propatys) {
-      //     formated.push({ image: s.frontPageImg, street_address_number: s.street_address_number, street_address_name: s.street_address_name, suburb: s.suburb })
-      // }
-      allagent.push({
-        _id: d._id,
-        count: propatys.length,
-        name: d.name,
-        profileImg: d.profileImg,
-      });
-    }
+    const pipeline = [
+      {
+        $sort: { _id: -1 }
+      },
+      {
+        $lookup: {
+          from: "property_listings",
+          localField: "_id",
+          foreignField: "lead_agent",
+          as: "properties"
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          profileImg: 1,
+          count: { $size: "$properties" }
+        }
+      }
+    ];
+    const results = await admin_agent.aggregate(pipeline);
+    const allAgent = results.map(agent => ({
+      _id: agent._id,
+      name: agent.name,
+      profileImg: agent.profileImg,
+      count: agent.count
+    }));
     return res.status(HTTP.SUCCESS).send({
       status: true,
       code: HTTP.SUCCESS,
-      message: "Your data Send Succesfully !",
-      data: allagent,
+      message: "Your data Send Successfully !",
+      data: allAgent,
     });
   } catch (error) {
     return res.status(HTTP.SUCCESS).send({
@@ -1943,7 +1956,7 @@ module.exports = {
   compareAgents,
   contact_us,
   propaties,
-  latestagent,
+  latestAgent,
   loginWithGoogle,
   loginWithFacebook,
 

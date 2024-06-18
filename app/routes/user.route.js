@@ -74,7 +74,7 @@ router.post("/comparision", userControllers.compareAgents);
 
 router.post("/contact_us", userControllers.contact_us);
 router.get("/propaties", userControllers.propaties);
-router.get("/latestagent", userControllers.latestagent);
+router.get("/latestagent", userControllers.latestAgent);
 
 
 
