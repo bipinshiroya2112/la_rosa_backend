@@ -1275,13 +1275,8 @@ async function savedProperty(req, res) {
       const proDetails = await property_listing.find({
         $or: [{ status: { $regex: req.body.status } }],
       });
-      console.log("proDetails::>>", proDetails)
       for (const _data of proDetails) {
-        //   console.log(data, "======data=>");
-        //   console.log(_data._id, "------>");
-
         if (new ObjectId(data).toString() == new ObjectId(_data._id).toString()) {
-          console.log("match");
           result.push({
             _id: _data._id,
             frontPageImg: _data.frontPageImg,
