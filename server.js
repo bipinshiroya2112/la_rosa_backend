@@ -15,6 +15,7 @@ const admin_router = require('./app/routes/admin_router')
 const multer = require('multer');
 const upload = multer();
 const vercel = require('@vercel/blob/client');
+const path = require('path');
 
 app.use(cors());
 // dtQcltpZHeYY1pkQCu6XRoqfWsDDu9QbY3NQ1Lb8YMF9xP-FMlI-qBJ7WZxXxlFl0Z4
@@ -29,8 +30,8 @@ app.use(passport.initialize())
 require('./config/passport')
 
 
-
-app.use(express.static('public'));
+app.use('/public', express.static(path.join(__dirname, 'public')))
+// app.use(express.static('public'));
 app.use('/uploads', express.static('uploads'));
 
 app.use(express.urlencoded({ extended: true }))
