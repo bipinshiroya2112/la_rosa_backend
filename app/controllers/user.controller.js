@@ -8,9 +8,7 @@ const nodemailer = require("nodemailer");
 const {
   formateUserData,
   createSessionAndJwtToken,
-  sendEmail,
   sendEmailOTP,
-  sendForgotPasswordLink,
   sendContactusemail,
 } = require("../../public/partials/utils");
 const Register = require("../models/register");
@@ -101,6 +99,17 @@ async function signup(req, res) {
     password = hashSync(password, salt);
   }
 
+  const RegisterExists = await Register.findOne({ $or: [{ email: email }] });
+  if (RegisterExists) {
+    return res.status(HTTP.SUCCESS).send({
+      status: false,
+      code: HTTP.BAD_REQUEST,
+      message: "User Exists. Please Sign In.",
+      data: {},
+      page: "signin",
+    });
+  }
+
   //  check Register + verified
   const RegisterValid = await Register.findOne({
     $and: [{ email: email }, { isVerified: false }],
@@ -114,20 +123,7 @@ async function signup(req, res) {
       page: "verifyOtp",
     });
   }
-
-  const RegisterExists = await Register.findOne({ $or: [{ email: email }] });
-  if (RegisterExists) {
-    return res.status(HTTP.SUCCESS).send({
-      status: false,
-      code: HTTP.BAD_REQUEST,
-      message: "User Exists. Please Sign In.",
-      data: {},
-      page: "signin",
-    });
-  }
-
   const otpCheck = randomstring.generate({ length: 4, charset: "numeric" });
-
   const RegisterData = await new Register({
     email,
     password,
@@ -166,8 +162,8 @@ async function signup(req, res) {
       return res.status(HTTP.SUCCESS).send({
         status: true,
         code: HTTP.SUCCESS,
-        message: "Please check your email.",
-        data: val,
+        message: "User Registered! Check your email to verify.",
+        data: {},
       });
     })
     .catch((err) => {
@@ -179,13 +175,6 @@ async function signup(req, res) {
         data: {},
       });
     });
-
-  return res.status(HTTP.SUCCESS).send({
-    status: true,
-    code: HTTP.SUCCESS,
-    message: "User Registered! Check your email to verify.",
-    data: RegisterData,
-  });
 }
 
 // ================================================= login with login ==================================================================

@@ -152,8 +152,8 @@ async function checkSessionExpiration() {
 // otp email
 
 const sendEmailOTP = (sendData) => {
-  try {
-    return new Promise(async (resolve) => {
+  return new Promise(async (resolve, reject) => {
+    try {
       var file_template = sendData.file_template;
       var subject = sendData.subject;
       console.log("subject", subject);
@@ -162,16 +162,19 @@ const sendEmailOTP = (sendData) => {
         host: "smtp.gmail.com",
         port: 465,
         secure: true,
-        tls: { rejectUnauthorized: false },
         auth: {
           user: "tanthetaauser@gmail.com",
           pass: "ydsioiddnnfvcclm",
         },
-        // === add this === //
-        // tls : { rejectUnauthorized: false }
+        tls: { rejectUnauthorized: false }
       });
 
       fs.readFile(file_template, { encoding: "utf-8" }, function (err, html) {
+        if (err) {
+          console.log("File read error: " + err);
+          return reject({ status: false, data: [], message: "Could not read email template file!" });
+        }
+
         var template = handlebars.compile(html);
         var htmlToSend = template(sendData);
 
@@ -187,17 +190,16 @@ const sendEmailOTP = (sendData) => {
             console.log("error" + error);
             return { status: false, data: [], message: "Could not send mail!" };
           }
-
           console.log("info " + info);
           console.log("Message sent: %s", info.messageId);
           console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-          return { status: true, data: [], message: "mail sent!." };
+          resolve({ status: true, data: [], message: "Mail sent!" });
         });
       });
-    });
-  } catch (err) {
-    console.log(err);
-  }
+    } catch (err) {
+      console.log(err);
+    }
+  });
 };
 
 // sendForgotPasswordLink
