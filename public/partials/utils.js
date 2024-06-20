@@ -163,8 +163,8 @@ const sendEmailOTP = (sendData) => {
         port: 465,
         secure: true,
         auth: {
-          user: "info@myrealestate-ng.com",
-          pass: "4EDVB%^H&g*GJ*",
+          user: "tanthetaauser@gmail.com",
+          pass: "ydsioiddnnfvcclm",
         },
         tls: { rejectUnauthorized: false }
       });
