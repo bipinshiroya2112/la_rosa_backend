@@ -23,8 +23,8 @@ let transporter = nodemailer.createTransport({
   secure: true,
   // tls : { rejectUnauthorized: false },
   auth: {
-    user: "tanthetaauser@gmail.com",
-    pass: "ydsioiddnnfvcclm",
+    user: "info@myrealestate-ng.com",
+    pass: "spasebcjogarhnrt",
   },
   // === add this === //
   // tls : { rejectUnauthorized: false }
@@ -465,7 +465,7 @@ async function sendEnquiry(req, res) {
     </html>`;
 
     var mailOptions = {
-      from: "tanthetaauser@gmail.com",
+      from: "info@myrealestate-ng.com",
       to: agentEmail.email,
       subject: "Send Property Details",
       html: htmlToSend,

@@ -262,8 +262,8 @@ async function forgotPassword(req, res) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "tanthetaauser@gmail.com",
-        pass: "ydsioiddnnfvcclm",
+        user: "info@myrealestate-ng.com",
+        pass: "spasebcjogarhnrt",
       },
     });
     const htmlTemplate = `
@@ -944,8 +944,8 @@ async function agencyFpassword(req, res) {
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "tanthetaauser@gmail.com",
-        pass: "ydsioiddnnfvcclm",
+        user: "info@myrealestate-ng.com",
+        pass: "spasebcjogarhnrt",
       },
     });
     const htmlTemplate = `

@@ -163,8 +163,8 @@ const sendEmailOTP = (sendData) => {
         port: 465,
         secure: true,
         auth: {
-          user: "tanthetaauser@gmail.com",
-          pass: "ydsioiddnnfvcclm",
+          user: "info@myrealestate-ng.com",
+          pass: "spasebcjogarhnrt",
         },
         tls: { rejectUnauthorized: false }
       });
@@ -282,8 +282,8 @@ const sendForgotPasswordLink = (sendData) => {
           port: 465,
           secure: true,
           auth: {
-            user: "tanthetaauser@gmail.com",
-            pass: "ydsioiddnnfvcclm",
+            user: "info@myrealestate-ng.com",
+            pass: "spasebcjogarhnrt",
           },
         });
 
@@ -326,8 +326,8 @@ const sendContactusemail = (sendData) => {
         secure: true,
         tls: { rejectUnauthorized: false },
         auth: {
-          user: "tanthetaauser@gmail.com",
-          pass: "ydsioiddnnfvcclm",
+          user: "info@myrealestate-ng.com",
+          pass: "spasebcjogarhnrt",
         },
         // === add this === //
         // tls : { rejectUnauthorized: false }
