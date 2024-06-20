@@ -730,7 +730,7 @@ async function forgotPassword(req, res) {
     `;
 
     const mailOptions = {
-      from: 'tanthetaauser@gmail.com"',
+      from: 'info@myrealestate-ng.com',
       to: result.email,
       subject: "Link to reset the password",
       html: htmlTemplate,

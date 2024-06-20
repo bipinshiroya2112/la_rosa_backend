@@ -185,7 +185,7 @@ async function sendPropertyDetails(req, res) {
 `;
 
     var mailOptions = {
-      from: "tanthetaauser@gmail.com",
+      from: "info@myrealestate-ng.com",
       to: agentDetails?.email,
       subject: "Send Property Details",
       html: htmlToSend,

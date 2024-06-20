@@ -179,7 +179,7 @@ const sendEmailOTP = (sendData) => {
         var htmlToSend = template(sendData);
 
         var mailOptions = {
-          from: "tanthetaauser@gmail.com",
+          from: "info@myrealestate-ng.com",
           to: sendData.to,
           subject: subject,
           html: htmlToSend,
@@ -288,7 +288,7 @@ const sendForgotPasswordLink = (sendData) => {
         });
 
         var mailOptions = {
-          from: "tanthetaauser@gmail.com",
+          from: "info@myrealestate-ng.com",
           to: sendData.to,
           subject: subject,
           html: htmlToSend,
