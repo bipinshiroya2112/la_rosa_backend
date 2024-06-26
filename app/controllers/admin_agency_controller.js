@@ -253,9 +253,9 @@ async function forgotPassword(req, res) {
     let link = "";
 
     if (result.role == "admin") {
-      link = `${process.env.REACT_MAINADMIN_APP_WEB_URL}/${result.id}/${token}`;
+      link = `${process.env.REACT_MAINADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
     } else {
-      link = `${process.env.REACT_ADMIN_APP_WEB_URL}/${result.id}/${token}`;
+      link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
     }
 
     console.log(link, "this is a link result id");
@@ -886,10 +886,7 @@ async function agencyFpassword(req, res) {
     }
 
     result = await Register.findOne({ email: req.body.email });
-    console.log(
-      "🚀 ~ file: admin_agency_controller.js:313 ~ agencyFpassword ~ result:",
-      result
-    );
+
     if (!result) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -905,7 +902,7 @@ async function agencyFpassword(req, res) {
       { expiresIn: "15m" }
     );
 
-    const link = `${process.env.REACT_ADMIN_APP_WEB_URL}/${result.id}/${token}`;
+    const link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
 
     // var sendMailData = {
     //   file_template: "./public/emailTemplates/forgotPassword.html",

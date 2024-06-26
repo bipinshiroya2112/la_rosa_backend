@@ -569,7 +569,7 @@ async function forgotPassword(req, res) {
     const payload = { id: result._id, email: result.email };
     const secret = process.env.JWT_SECRET + result.password;
     const token = jwt.sign(payload, secret);
-    const link = `${process.env.REACT_USER_APP_WEB_URL}/${id}/${token}`;
+    const link = `${process.env.REACT_USER_APP_WEB_URL}/auth/reset-password/${id}/${token}`;
     const set_token = await Register.findOneAndUpdate(
       { email: result.email },
       { token },
