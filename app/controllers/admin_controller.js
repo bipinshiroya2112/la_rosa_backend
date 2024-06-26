@@ -41,7 +41,7 @@ async function TotalCount(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -88,7 +88,7 @@ async function ViewAllAgency(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: data,
         });
     }
@@ -167,7 +167,7 @@ async function ViewAllproperty(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -321,7 +321,7 @@ async function Create(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -366,7 +366,7 @@ async function publishUpdate(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -864,7 +864,7 @@ async function AgencyEdit(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -900,7 +900,7 @@ async function AgencyDelete(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -936,7 +936,7 @@ async function ViewAgencyByid(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: data,
         });
     }
@@ -972,7 +972,7 @@ async function ViewAgencyOfproperty(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -997,7 +997,7 @@ async function ViewAgencyOfproperty(req, res) {
 //             var agent_data = await admin_agent.find({ _id: id });
 //             return res.status(HTTP.SUCCESS).send({ status: true, code: HTTP.SUCCESS, message: "Agency delete", data: agent_data });
 //         } else {
-//             return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.UNAUTHORIZED, message: "Please authenticate your-self", data: {} });
+//             return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.UNAUTHORIZED, message: "Access denied. Please log in to continue.", data: {} });
 //         }
 //     } catch (error) {
 //         console.log(error);
@@ -1229,7 +1229,7 @@ async function agentDelete(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -1267,7 +1267,7 @@ async function agentView(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -1310,7 +1310,7 @@ async function publishAgentUpdate(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -1456,7 +1456,7 @@ async function agentEdit(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -1764,7 +1764,7 @@ async function ListingCreate(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -1801,7 +1801,7 @@ async function listingView(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -2202,7 +2202,7 @@ async function Listingedit(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -2234,7 +2234,7 @@ async function propertyDelete(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -2281,7 +2281,7 @@ async function viewallUser(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -2312,7 +2312,7 @@ async function Userdelete(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }
@@ -2363,7 +2363,7 @@ async function userBlock(req, res) {
         .send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
     }

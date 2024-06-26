@@ -2466,7 +2466,7 @@ async function agentUpdateProfile(req, res) {
       });
     }
     // } else {
-    //   return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.UNAUTHORIZED, message: "Please authenticate your-self", data: {} });
+    //   return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.UNAUTHORIZED, message: "Access denied. Please log in to continue.", data: {} });
     // }
   } catch (error) {
     console.log(error);

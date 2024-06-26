@@ -141,7 +141,7 @@ function authUser(req, res, next) {
         return res.status(HTTP.SUCCESS).send({
           status: false,
           code: HTTP.UNAUTHORIZED,
-          message: "Please authenticate your-self",
+          message: "Access denied. Please log in to continue.",
           data: {},
         });
       }
