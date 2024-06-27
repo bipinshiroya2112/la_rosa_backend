@@ -2621,6 +2621,7 @@ async function viewAllAgents(req, res) {
           average,
           // agencySmallLogo: 'uploads/agency_image/commercialAgencySmallLogo-1680591891362.png',
           // agencyName: 'agency name',
+          agencyId: data.agency_id.id,
           agencySmallLogo: data.agency_id.agencySmallLogo,
           agencyName: data.agency_id.principal_name,
           propertyDetails: propertyDetails,
