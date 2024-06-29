@@ -576,8 +576,8 @@ async function forgotPassword(req, res) {
       { token },
       { new: true }
     );
-    console.log(set_token);
-    console.log(result.id, "this is a link result id");
+    // console.log(set_token);
+    // console.log(result.id, "this is a link result id");
     // send link ==================================================
     // return res.status(HTTP.SUCCESS).send({ "status": true, 'code': HTTP.SUCCESS, "message": "checking...", 'data': {} })
     var sendMailData = {

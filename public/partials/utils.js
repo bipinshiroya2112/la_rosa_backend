@@ -265,7 +265,7 @@ const sendForgotPasswordLink = (sendData) => {
     try {
       var file_template = sendData.file_template;
       var subject = sendData.subject;
-      console.log("subject:--------------", subject);
+      // console.log("subject:--------------", subject);
 
       fs.readFile(file_template, { encoding: "utf-8" }, function (err, html) {
         if (err) {
@@ -303,7 +303,7 @@ const sendForgotPasswordLink = (sendData) => {
           }
 
           console.log("Message sent: %s", info.messageId);
-          console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+          // console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
           resolve({ status: true, data: [], message: "mail sent!." }); // Resolve the promise if email is sent successfully
         });
       });
