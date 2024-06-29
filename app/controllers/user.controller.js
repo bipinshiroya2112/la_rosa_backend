@@ -738,23 +738,28 @@ async function forgotPassword(req, res) {
 
     console.log("test");
 
+
     transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-        res.status(HTTP.SUCCESS).send({
-          status: false,
-          code: HTTP.BAD_REQUEST,
-          message: "Unable to send email!",
-          data: {},
-        });
-      } else {
-        console.log("Email sent: " + info.response);
-        res.status(HTTP.SUCCESS).send({
-          status: true,
-          code: HTTP.SUCCESS,
-          message: "Please check your email.",
-          data: {},
-        });
+      try {
+        if (error) {
+          console.log(error);
+          res.status(HTTP.SUCCESS).send({
+            status: false,
+            code: HTTP.BAD_REQUEST,
+            message: "Unable to send email!",
+            data: {},
+          });
+        } else {
+          console.log("Email sent: " + info.response);
+          res.status(HTTP.SUCCESS).send({
+            status: true,
+            code: HTTP.SUCCESS,
+            message: "Please check your email.",
+            data: {},
+          });
+        }
+      } catch (error) {
+        console.log("email error", error);
       }
     });
     return res.status(HTTP.SUCCESS).send({
