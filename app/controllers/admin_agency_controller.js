@@ -1118,7 +1118,6 @@ async function updatePassword(req, res) {
 // }
 
 async function agencySetpassword(req, res) {
-  console.log("-----------------------------------------------");
   try {
     let { password, cpassword, oldpassword, role, id } = req.body; // Extract id from req.body
     console.log("🚀 ~ agencySetpassword ~ email:", req.body);
@@ -1157,7 +1156,7 @@ async function agencySetpassword(req, res) {
 
     // Verify old password from the database
     const user = await Register.findOne({ _id: id }); // Find user by _id
-    console.log("----------------------", user);
+    // console.log("----------------------", user);
     if (!user) {
       return res.status(HTTP.SUCCESS).send({
         status: false,
@@ -1604,7 +1603,7 @@ async function Agency_Branding_Update(req, res) {
   var id = req.Data;
   try {
     const { secondary_color, primary_color, text_color, heroImg, agencyLargeLogo, agencyMediumLogo, agencySmallLogo } = req.body;
-    console.log("-------------- branding body ----------->> ", req.body);
+    // console.log("-------------- branding body ----------->> ", req.body);
     const agencyDetails = await Register.findById(id)
     if (secondary_color || primary_color || text_color) {
       await Register.findByIdAndUpdate(

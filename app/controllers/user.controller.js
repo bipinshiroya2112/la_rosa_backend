@@ -546,7 +546,7 @@ async function updateEmail(req, res) {
 
 async function forgotPassword(req, res) {
   try {
-    console.log("---------------------->>>>>>>>>>>");
+    // console.log("---------------------->>>>>>>>>>>");
     let { email } = req.body;
     if (!email) {
       return res.status(HTTP.SUCCESS).send({
@@ -1044,7 +1044,7 @@ async function logoutFromAll(req, res) {
 
 async function getUserProfile(req, res) {
   try {
-    console.log("req.user.id---------------", req.user.id);
+    // console.log("req.user.id---------------", req.user.id);
     let result = await Register.findById(req.user.id);
     if (!result)
       return res.status(HTTP.SUCCESS).send({

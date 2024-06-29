@@ -14,8 +14,6 @@ const Register = require("../models/register");
 
 function verifyToken(req, res, next) {
   let token = req.cookies.jwttoken; //get cookie from request
-  console.log("---------------token----------------------");
-  // console.log(token);
 
   if (token) {
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
@@ -133,7 +131,6 @@ function authUser(req, res, next) {
 
       // console.log("🚀 ~ authUser ~ userData", userData)
       const { user, sessionId } = userData;
-      console.log(" ---------------authUser------------------- ");
       // console.log("=================sessionID", sessionId);
       // console.log("=================user", user);
 

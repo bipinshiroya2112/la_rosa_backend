@@ -552,7 +552,7 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "--------------------><--------------------");
+            // console.log(doc, "--------------------><--------------------");
             var imagePath = "";
             if (agencyDetail.agencyMediumLogo) {
               imagePath = agencyDetail.agencyMediumLogo;
@@ -573,7 +573,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.agencyLargeLogo) {
           if (req.files.agencyLargeLogo !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.agencyLargeLogo) {
               fs.unlinkSync(
                 path.join(__dirname, "..", "..", agencyDetail.agencyLargeLogo)
@@ -597,7 +596,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.agencyLargeLogo) {
               imagePath = agencyDetail.agencyLargeLogo;
@@ -618,7 +616,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.commercialAgencySmallLogo) {
           if (req.files.commercialAgencySmallLogo !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.commercialAgencySmallLogo) {
               fs.unlinkSync(
                 path.join(
@@ -644,7 +641,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.commercialAgencySmallLogo) {
               imagePath = agencyDetail.commercialAgencySmallLogo;
@@ -665,7 +661,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.commercialAgencyMediumLogo) {
           if (req.files.commercialAgencyMediumLogo !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.commercialAgencyMediumLogo) {
               fs.unlinkSync(
                 path.join(
@@ -691,7 +686,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.commercialAgencyMediumLogo) {
               imagePath = agencyDetail.commercialAgencyMediumLogo;
@@ -712,7 +706,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.commercialAgencyLargeLogo) {
           if (req.files.commercialAgencyLargeLogo !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.commercialAgencyLargeLogo) {
               fs.unlinkSync(
                 path.join(
@@ -738,7 +731,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.commercialAgencyLargeLogo) {
               imagePath = agencyDetail.commercialAgencyLargeLogo;
@@ -759,7 +751,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.commercialAgencyExtraLargeLogo) {
           if (req.files.commercialAgencyExtraLargeLogo !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.commercialAgencyExtraLargeLogo) {
               fs.unlinkSync(
                 path.join(
@@ -788,7 +779,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.commercialAgencyExtraLargeLogo) {
               imagePath = agencyDetail.commercialAgencyExtraLargeLogo;
@@ -809,7 +799,6 @@ async function AgencyEdit(req, res) {
         }
         if (req.files.heroImg) {
           if (req.files.heroImg !== null) {
-            console.log(doc, "-------------------->");
             if (agencyDetail.heroImg) {
               fs.unlinkSync(path.join(__dirname, "..", "..", agencyDetail.heroImg));
             }
@@ -827,7 +816,6 @@ async function AgencyEdit(req, res) {
                 };
             }
           } else {
-            console.log(doc, "-------------------->");
             var imagePath = "";
             if (agencyDetail.heroImg) {
               imagePath = agencyDetail.heroImg;
