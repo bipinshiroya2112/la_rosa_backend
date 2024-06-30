@@ -29,7 +29,7 @@ router.post("/agentadmin/Signup", adminagencyController.agencySignup);
 router.post("/agentadmin/Signin", adminagencyController.agencySignin);
 router.post(
   "/agentadmin/ForgotPassword",
-  adminagencyController.agencyFpassword
+  adminagencyController.agencyFPassword
 );
 router.post(
   "/agentadmin/SetNewPassword",

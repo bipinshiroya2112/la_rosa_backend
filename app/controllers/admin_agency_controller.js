@@ -11,7 +11,7 @@ const {
 } = require("../../public/partials/utils");
 const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
-const admin_agent = require("../models/admin.agent");
+const Admin_agent = require("../models/admin.agent");
 const property_listing = require("../models/property_listing");
 const Register = require("../models/register");
 // const { ApiKeyManager } = require('@esri/arcgis-rest-request');
@@ -242,11 +242,15 @@ async function forgotPassword(req, res) {
 
     // console.log(result, "result");
 
-    const token = jwt.sign(
-      { id: result._id, email: result.email },
-      process.env.JWT_SECRET,
-      { expiresIn: "15m" }
-    );
+    // const token = jwt.sign(
+    //   { id: result._id, email: result.email },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "15m" }
+    // );
+
+    const payload = { id: result._id, email: result.email };
+    const secret = process.env.JWT_SECRET + result.password;
+    const token = jwt.sign(payload, secret);
 
     console.log("token", token);
 
@@ -684,7 +688,7 @@ async function agencySignin(req, res) {
       });
     }
     if (role == "agent") {
-      const agentExists = await admin_agent.findOne({ email: req.body.email });
+      const agentExists = await Admin_agent.findOne({ email: req.body.email });
 
       if (!agentExists) {
         return res.status(HTTP.SUCCESS).send({
@@ -694,14 +698,7 @@ async function agencySignin(req, res) {
           data: {},
         });
       }
-      // if (!bcrypt.compareSync(password, agentExists.password)) {
-      //   return res.status(HTTP.SUCCESS).send({
-      //     success: false,
-      //     code: HTTP.BAD_REQUEST,
-      //     message: "Password is incorrect",
-      //     data: {},
-      //   });
-      // }
+
       if (password != agentExists.password) {
         return res.status(HTTP.SUCCESS).send({
           success: false,
@@ -740,14 +737,9 @@ async function agencySignin(req, res) {
 
 //====================================================================  agency forgot password  =================================================================================
 
-async function agencyFpassword(req, res) {
+async function agencyFPassword(req, res) {
   try {
-    let { email } = req.body;
-    // console.log(
-    //   "🚀 ~ file: admin_agency_controller.js:306 ~ agencyFpassword ~ email:",
-    //   email
-    // );
-
+    let { email, role } = req.body;
     if (!email) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -756,9 +748,13 @@ async function agencyFpassword(req, res) {
         data: {},
       });
     }
-
-    result = await Register.findOne({ email: req.body.email });
-
+    let result;
+    if (role === 'agent') {
+      result = await Admin_agent.findOne({ email: req.body.email });
+    } else {
+      result = await Register.findOne({ email: req.body.email });
+    }
+    // console.log("result::=========", result);
     if (!result) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -769,200 +765,196 @@ async function agencyFpassword(req, res) {
     }
 
     const token = jwt.sign(
-      { id: result._id, email: result.email },
+      { id: result._id, email: result.email, role: result.role },
       process.env.JWT_SECRET,
       { expiresIn: "15m" }
     );
 
     const link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
 
-    // var sendMailData = {
-    //   file_template: "./public/emailTemplates/forgotPassword.html",
-    //   subject: "Link to reset the password",
-    //   to: result.email ? result.email : null,
-    //   link: link,
-    // };
-
-    // sendForgotPasswordLink(sendMailData)
-    //   .then((val) => {
-    //     console.log(
-    //       "🚀 ~ file: admin_agency_controller.js:335 ~ .then ~ val:",
-    //       val
-    //     );
-    //     return res.status(HTTP.SUCCESS).send({
-    //       status: true,
-    //       code: HTTP.SUCCESS,
-    //       message: "Please check your email.",
-    //       data: val,
-    //     });
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     return res.status(HTTP.SUCCESS).send({
-    //       status: false,
-    //       code: HTTP.BAD_REQUEST,
-    //       message: "Unable to send email!",
-    //       data: {},
-    //     });
-    //   });
-
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: "info@myrealestate-ng.com",
-        pass: "spasebcjogarhnrt",
-      },
-    });
-    const htmlTemplate = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <title>Forgot Password</title>
-          <style>
-              *, body, p {
-                  margin: 0;
-                  padding: 0;
-              }
-              body {
-                  overflow: hidden;
-                  overflow-y: auto;
-                  font-family: 'Montserrat', sans-serif;
-                  font-weight: 500;
-              }
-              .qop {
-                  background-color: white;
-                  border: 2px solid #001BEA;
-                  color: green;
-                  padding: 12px 10px;
-                  text-align: center;
-                  display: inline-block;
-                  font-size: 20px;
-                  margin: 10px 30px;
-                  cursor: pointer;
-              }
-          </style>
-      </head>
-      <body>
-          <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
-          style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,50https://res.cloudinary.com/dqffs1rxq/image/upload/v1663149858/logo_sxtkrk.png0,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif; padding-top: 20px;  ">
-          <tr>
-          <td>
-              <table style="max-width:670px; margin:0 auto;  position: absolute;
-                  top: 50%;
-                  left: 50%;
-                  transform: translate(-50% , -50%);padding: 0 15px;" width="100%" border="0"
-                  align="center" cellpadding="0" cellspacing="0">
-                  <tr>
-                      <td>
-                      <table width="100%" style="border:0; border-spacing:0">
-                          <tr>
-                              <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
-                              </tr>
-                      </table>
-                      <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0"
-                          style="max-width:670px; background:#fff; border-radius:3px; text-align:center;">
-                          <tr>
-                              <td style="height:40px;">&nbsp;</td>
-                          </tr>
-                          <tr>
-                              <td style="text-align:center;">
-                                  <img src="https://myrealestate.ng/static/media/logoSmall.c865497de0bfca834259.png" title="logo" alt="logo"> 
-                              </td>
-                          </tr>
-                          <tr>
-                              <td style="padding:0 35px;">
-                                  <p
-                                  style="font-size:28px; color:#001BEA; margin:35px 0 0; line-height:24px; font-weight: bold;">
-                                  Forgot Password Verification Link
-                                  </span>
-                                  </p>
-                                  <p
-                                  style="color:#001BEA; font-size:18px;line-height:23px; margin:0; font-weight: 500; margin-top: 20px;">
-                                  <h3><strong> 
-                                
-                                    <a href="${link}" class="GFG">
-                                      <button style="border: 2px solid #001BEA; padding: 12px 27px; cursor: pointer; border-radius: 21px; font-size: 18px; background: rgb(0 27 234 / 22%);">
-                                          Click Here To Reset Password
-                                      </button>
-                                      </a>
-                                  </strong></h3>
-                                  
-                                  </p>
-                                  
-                              </td>
-                          </tr>
-                      </table>
-                      <table width="100%" style="border:0; border-spacing:0">
-                          <tr>
-                              <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
-                              </tr>
-                      </table>
-                      </td>
-                  </tr>
-                  <tr>
-                      <td style="height:100px; background-color: white ">&nbsp;</td>
-                  </tr>
-                  <tr>
-                      <td style="height:50px; background-color: transparent ">&nbsp;</td>
-                  </tr>
-                  <tr>
-                      <td style="text-align:center; background-color: transparent;">
-                      <p
-                          style="font-size:14px; color:#9f9f9f; line-height:18px; margin:0 0 0; font-weight: bold;padding-bottom: 20px;">
-                          
-                          Sent with <span style="margin-top:2px;"> <img src="https://res.cloudinary.com/dqffs1rxq/image/upload/v1663151795/heart_clyvbj.png" alt=""
-                              width="15px" height="15px"> </span> from <span
-                              style="background-color:#fce293 ;margin-left: 3px;">  Team myrealestate-ng </span>
-                          </span>
-                      </p>
-                      </td>
-                  </tr>
-              </table>
-          </td>
-          </tr>
-          </table>
-          <!--/100% body table-->
-
-      </body>
-      </html>
-    `;
-
-    const mailOptions = {
-      from: 'info@myrealestate-ng.com',
-      to: result.email,
+    var sendMailData = {
+      file_template: "./public/emailTemplates/forgotPassword.html",
       subject: "Link to reset the password",
-      html: htmlTemplate,
+      to: result.email ? result.email : null,
+      link: link,
     };
 
-    console.log("test");
-
-    transporter.sendMail(mailOptions, function (error, info) {
-      if (error) {
-        console.log(error);
-        res.status(HTTP.SUCCESS).send({
+    sendForgotPasswordLink(sendMailData)
+      .then((val) => {
+        return res.status(HTTP.SUCCESS).send({
+          status: true,
+          code: HTTP.SUCCESS,
+          message: "Please check your email.",
+          data: val,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        return res.status(HTTP.SUCCESS).send({
           status: false,
           code: HTTP.BAD_REQUEST,
           message: "Unable to send email!",
           data: {},
         });
-      } else {
-        console.log("Email sent: " + info.response);
-        res.status(HTTP.SUCCESS).send({
-          status: true,
-          code: HTTP.SUCCESS,
-          message: "Please check your email.",
-          data: {},
-        });
-      }
-    });
-    return res.status(HTTP.SUCCESS).send({
-      status: true,
-      code: HTTP.SUCCESS,
-      data: { token: token },
-    });
+      });
+
+    //   const transporter = nodemailer.createTransport({
+    //     service: "gmail",
+    //     auth: {
+    //       user: "info@myrealestate-ng.com",
+    //       pass: "spasebcjogarhnrt",
+    //     },
+    //   });
+    //   const htmlTemplate = `
+    //     <!DOCTYPE html>
+    //     <html lang="en">
+    //     <head>
+    //         <meta charset="UTF-8">
+    //         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    //         <title>Forgot Password</title>
+    //         <style>
+    //             *, body, p {
+    //                 margin: 0;
+    //                 padding: 0;
+    //             }
+    //             body {
+    //                 overflow: hidden;
+    //                 overflow-y: auto;
+    //                 font-family: 'Montserrat', sans-serif;
+    //                 font-weight: 500;
+    //             }
+    //             .qop {
+    //                 background-color: white;
+    //                 border: 2px solid #001BEA;
+    //                 color: green;
+    //                 padding: 12px 10px;
+    //                 text-align: center;
+    //                 display: inline-block;
+    //                 font-size: 20px;
+    //                 margin: 10px 30px;
+    //                 cursor: pointer;
+    //             }
+    //         </style>
+    //     </head>
+    //     <body>
+    //         <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
+    //         style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,50https://res.cloudinary.com/dqffs1rxq/image/upload/v1663149858/logo_sxtkrk.png0,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif; padding-top: 20px;  ">
+    //         <tr>
+    //         <td>
+    //             <table style="max-width:670px; margin:0 auto;  position: absolute;
+    //                 top: 50%;
+    //                 left: 50%;
+    //                 transform: translate(-50% , -50%);padding: 0 15px;" width="100%" border="0"
+    //                 align="center" cellpadding="0" cellspacing="0">
+    //                 <tr>
+    //                     <td>
+    //                     <table width="100%" style="border:0; border-spacing:0">
+    //                         <tr>
+    //                             <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
+    //                             </tr>
+    //                     </table>
+    //                     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0"
+    //                         style="max-width:670px; background:#fff; border-radius:3px; text-align:center;">
+    //                         <tr>
+    //                             <td style="height:40px;">&nbsp;</td>
+    //                         </tr>
+    //                         <tr>
+    //                             <td style="text-align:center;">
+    //                                 <img src="https://myrealestate.ng/static/media/logoSmall.c865497de0bfca834259.png" title="logo" alt="logo"> 
+    //                             </td>
+    //                         </tr>
+    //                         <tr>
+    //                             <td style="padding:0 35px;">
+    //                                 <p
+    //                                 style="font-size:28px; color:#001BEA; margin:35px 0 0; line-height:24px; font-weight: bold;">
+    //                                 Forgot Password Verification Link
+    //                                 </span>
+    //                                 </p>
+    //                                 <p
+    //                                 style="color:#001BEA; font-size:18px;line-height:23px; margin:0; font-weight: 500; margin-top: 20px;">
+    //                                 <h3><strong> 
+
+    //                                   <a href="${link}" class="GFG">
+    //                                     <button style="border: 2px solid #001BEA; padding: 12px 27px; cursor: pointer; border-radius: 21px; font-size: 18px; background: rgb(0 27 234 / 22%);">
+    //                                         Click Here To Reset Password
+    //                                     </button>
+    //                                     </a>
+    //                                 </strong></h3>
+
+    //                                 </p>
+
+    //                             </td>
+    //                         </tr>
+    //                     </table>
+    //                     <table width="100%" style="border:0; border-spacing:0">
+    //                         <tr>
+    //                             <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
+    //                             </tr>
+    //                     </table>
+    //                     </td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td style="height:100px; background-color: white ">&nbsp;</td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td style="height:50px; background-color: transparent ">&nbsp;</td>
+    //                 </tr>
+    //                 <tr>
+    //                     <td style="text-align:center; background-color: transparent;">
+    //                     <p
+    //                         style="font-size:14px; color:#9f9f9f; line-height:18px; margin:0 0 0; font-weight: bold;padding-bottom: 20px;">
+
+    //                         Sent with <span style="margin-top:2px;"> <img src="https://res.cloudinary.com/dqffs1rxq/image/upload/v1663151795/heart_clyvbj.png" alt=""
+    //                             width="15px" height="15px"> </span> from <span
+    //                             style="background-color:#fce293 ;margin-left: 3px;">  Team myrealestate-ng </span>
+    //                         </span>
+    //                     </p>
+    //                     </td>
+    //                 </tr>
+    //             </table>
+    //         </td>
+    //         </tr>
+    //         </table>
+    //         <!--/100% body table-->
+
+    //     </body>
+    //     </html>
+    //   `;
+
+    //   const mailOptions = {
+    //     from: 'info@myrealestate-ng.com',
+    //     to: result.email,
+    //     subject: "Link to reset the password",
+    //     html: htmlTemplate,
+    //   };
+
+    //   console.log("test");
+
+    //   transporter.sendMail(mailOptions, function (error, info) {
+    //     if (error) {
+    //       console.log(error);
+    //       res.status(HTTP.SUCCESS).send({
+    //         status: false,
+    //         code: HTTP.BAD_REQUEST,
+    //         message: "Unable to send email!",
+    //         data: {},
+    //       });
+    //     } else {
+    //       console.log("Email sent: " + info.response);
+    //       res.status(HTTP.SUCCESS).send({
+    //         status: true,
+    //         code: HTTP.SUCCESS,
+    //         message: "Please check your email.",
+    //         data: {},
+    //       });
+    //     }
+    //   });
+    //   return res.status(HTTP.SUCCESS).send({
+    //     status: true,
+    //     code: HTTP.SUCCESS,
+    //     data: { token: token },
+    //   });
   } catch (err) {
     console.log(err);
     return res.status(HTTP.SUCCESS).send({
@@ -978,7 +970,7 @@ async function agencyFpassword(req, res) {
 async function updatePassword(req, res) {
   try {
     let { id, password, cpassword } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     if (!req.body) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -1012,12 +1004,19 @@ async function updatePassword(req, res) {
       { new: true }
     );
     if (!result) {
-      return res.status(HTTP.SUCCESS).send({
-        success: false,
-        code: HTTP.NOT_FOUND,
-        message: "Record not found",
-        data: {},
-      });
+      const agent = await Admin_agent.findByIdAndUpdate(
+        { _id: id },
+        { password: cpassword },
+        { new: true }
+      );
+      if (!agent) {
+        return res.status(HTTP.SUCCESS).send({
+          success: false,
+          code: HTTP.NOT_FOUND,
+          message: "Record not found",
+          data: {},
+        });
+      }
     }
     return res.status(HTTP.SUCCESS).send({
       status: true,
@@ -1233,7 +1232,7 @@ async function agencySetpassword(req, res) {
 //       //   { new: true }
 //       // );
 
-//       const result = await admin_agent.findOne({ _id: id });
+//       const result = await Admin_agent.findOne({ _id: id });
 //       console.log("🚀 ~ agentSetpassword ~ result:", result);
 //       result.password = password;
 //       await result.save();
@@ -1279,7 +1278,7 @@ async function agentSetpassword(req, res) {
   console.log("🚀 ~ agentSetpassword ~ id:", id);
   console.log("🚀 ~ agentSetpassword ~ password:", password);
 
-  const user = await admin_agent.findById(id);
+  const user = await Admin_agent.findById(id);
 
   if (!user) {
     return res.status(401).send({
@@ -1353,7 +1352,7 @@ async function agencyViewProfile(req, res) {
   if (req.body.role == "agent") {
     const objectId = mongoose.Types.ObjectId;
     const idObject = new objectId(id);
-    const agent = await admin_agent.aggregate([
+    const agent = await Admin_agent.aggregate([
       {
         $match: { _id: idObject },
       },
@@ -1895,14 +1894,14 @@ async function Agency_Branding_Update(req, res) {
 //       return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.BAD_REQUEST, message: "email is invalid!", data: {} });
 //     }
 
-//     const userExists = await admin_agent.findOne({ $or: [{ email: req.body.email }] });
+//     const userExists = await Admin_agent.findOne({ $or: [{ email: req.body.email }] });
 //     if (userExists)
 //       return res.status(HTTP.SUCCESS).send({ status: false, code: HTTP.BAD_REQUEST, message: "Agent with this email is already exist", data: {} });
 
 //     var agencyId_Data = req.Data;
 //     console.log("🚀 ~ file: admin_agency_controller.js:935 ~ agentregister ~ agencyId_Data:", agencyId_Data)
 
-//     await new admin_agent({
+//     await new Admin_agent({
 //       job_title,
 //       email,
 //       confirm_email,
@@ -1995,7 +1994,7 @@ async function agentregister(req, res) {
       });
     }
 
-    const userExists = await admin_agent.findOne({
+    const userExists = await Admin_agent.findOne({
       $or: [{ email: req.body.email }],
     });
     if (userExists)
@@ -2012,7 +2011,7 @@ async function agentregister(req, res) {
       agencyId_Data
     );
 
-    await new admin_agent({
+    await new Admin_agent({
       job_title,
       email,
       confirm_email,
@@ -2067,7 +2066,7 @@ async function agentViewProfile(req, res) {
   console.log("🚀 ~ agentViewProfile ~ idObject:", idObject);
 
   try {
-    const check = await admin_agent.findOne({ _id: id }).populate("agency_id");
+    const check = await Admin_agent.findOne({ _id: id }).populate("agency_id");
 
     const property = await property_listing.find({
       $and: [{ lead_agent: id }],
@@ -2155,7 +2154,7 @@ async function agentDelete(req, res) {
     );
   }
   // var id = data_id.toString().slice(0, 27);
-  admin_agent.findByIdAndDelete(data_id, async function (err, data) {
+  Admin_agent.findByIdAndDelete(data_id, async function (err, data) {
     if (err) {
       return res.status(HTTP.SUCCESS).send({
         status: false,
@@ -2212,7 +2211,7 @@ async function agentUpdateProfile(req, res) {
 
     // if (req.Data) {
     if (!req.files) {
-      const update = await admin_agent.findByIdAndUpdate(
+      const update = await Admin_agent.findByIdAndUpdate(
         id,
         { $set: req.body },
         { name },
@@ -2226,13 +2225,13 @@ async function agentUpdateProfile(req, res) {
         data: update,
       });
     } else {
-      await admin_agent.findByIdAndUpdate(
+      await Admin_agent.findByIdAndUpdate(
         id,
         { $set: req.body, name: name },
         { new: true }
       );
 
-      const doc = await admin_agent.findById(id, {}, { new: true });
+      const doc = await Admin_agent.findById(id, {}, { new: true });
 
       // if (req.files.profileImg) {
       //   if (req.files.profileImg !== null) {
@@ -2246,7 +2245,7 @@ async function agentUpdateProfile(req, res) {
       //         "🚀 ~ file: blog.controller.js:556 ~ editBlog ~ outsideImg",
       //         profileImg
       //       );
-      //       await admin_agent.findByIdAndUpdate(
+      //       await Admin_agent.findByIdAndUpdate(
       //         id,
       //         { profileImg, name },
       //         { new: true }
@@ -2264,7 +2263,7 @@ async function agentUpdateProfile(req, res) {
       //       imagePath = doc.profileImg;
       //     }
       //     for (data of req.files.profileImg) {
-      //       await admin_agent.findByIdAndUpdate(
+      //       await Admin_agent.findByIdAndUpdate(
       //         id,
       //         { profileImg: imagePath, name },
       //         { new: true }
@@ -2288,7 +2287,7 @@ async function agentUpdateProfile(req, res) {
       //     for (data of req.files.coverProfileImg) {
       //       coverProfileImg = "uploads/agent" + data.filename;
       //       // console.log("🚀 ~ file: blog.controller.js:589 ~ editBlog ~ outsideImg",coverProfileImg);
-      //       await admin_agent.findByIdAndUpdate(
+      //       await Admin_agent.findByIdAndUpdate(
       //         id,
       //         { coverProfileImg: coverProfileImg, name },
       //         { new: true }
@@ -2306,7 +2305,7 @@ async function agentUpdateProfile(req, res) {
       //       imagePath = doc.coverProfileImg;
       //     }
       //     for (data of req.files.coverProfileImg) {
-      //       await admin_agent.findByIdAndUpdate(
+      //       await Admin_agent.findByIdAndUpdate(
       //         id,
       //         { coverProfileImg: imagePath, name },
       //         { new: true }
@@ -2349,10 +2348,10 @@ async function viewAllAgentsOfAgency(req, res) {
     const id = req.Data;
     let agentsData;
     if (req.body.role == "agency") {
-      agentsData = await admin_agent.find({ agency_id: id });
+      agentsData = await Admin_agent.find({ agency_id: id });
     }
     if (req.body.role == "agent") {
-      agentsData = await admin_agent.find({ _id: id });
+      agentsData = await Admin_agent.find({ _id: id });
     }
 
     if (!agentsData)
@@ -2399,7 +2398,7 @@ async function viewAllAgentsOfAgency_U(req, res) {
 
     agency_id = req.body.id;
 
-    const agentsData = await admin_agent.find({ agency_id });
+    const agentsData = await Admin_agent.find({ agency_id });
 
     if (!agentsData)
       return res.status(HTTP.SUCCESS).send({
@@ -2445,10 +2444,10 @@ async function viewAllAgents(req, res) {
     // console.log("🚀 ~ viewAllAgents ~ key:", key)
     var usersData;
     if (key == "undefined") {
-      usersData = await admin_agent.find({}).populate("agency_id");
+      usersData = await Admin_agent.find({}).populate("agency_id");
       // console.log("🚀 ~ viewAllAgents ~ usersData:", usersData)
     } else {
-      usersData = await admin_agent
+      usersData = await Admin_agent
         .find({
           $or: [
             { name: { $regex: req.params.key, $options: "i" } },
@@ -2514,7 +2513,7 @@ async function viewAllAgents(req, res) {
 
     // const suburb = '394326'
     // console.log("🚀 ~ viewAllAgents ~ suburb:", suburb)
-    // const formattedUserData = await admin_agent.aggregate([
+    // const formattedUserData = await Admin_agent.aggregate([
     // {
     //   $lookup: {
     //     from: "property_listings",
@@ -2634,7 +2633,7 @@ async function sortBy(req, res) {
       });
     }
     if (req.body.sort_by == "agentAsending") {
-      const properties = await admin_agent.aggregate([
+      const properties = await Admin_agent.aggregate([
         {
           $lookup: {
             from: "property_listings",
@@ -2666,7 +2665,7 @@ async function sortBy(req, res) {
     //============================================================================================================================================================
 
     if (req.body.sort_by == "agentDescending") {
-      const properties = await admin_agent.aggregate([
+      const properties = await Admin_agent.aggregate([
         { $match: { agency_id: id } },
         {
           $lookup: {
@@ -3040,7 +3039,7 @@ module.exports = {
   // agency admin ---------------->
   agencySignup,
   agencySignin,
-  agencyFpassword,
+  agencyFPassword,
   agencySetpassword,
 
   // agency profile Manage ---------------->
