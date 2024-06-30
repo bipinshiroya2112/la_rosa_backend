@@ -1,32 +1,18 @@
-const express = require("express");
-const admin = require("../models/savesearch.model");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const { hashSync } = require("bcrypt");
 const HTTP = require("../../constants/responseCode.constant");
 const {
   sendForgotPasswordLink,
-  tokenforAgency,
   sendEmailOTP,
 } = require("../../public/partials/utils");
-const nodemailer = require("nodemailer");
 const bcrypt = require("bcrypt");
 const Admin_agent = require("../models/admin.agent");
 const property_listing = require("../models/property_listing");
 const Register = require("../models/register");
-// const { ApiKeyManager } = require('@esri/arcgis-rest-request');
 const axios = require("axios");
-// const { geocode } = require('@esri/arcgis-rest-geocoding');
-// const apiKey = "AAPK6761830a440b49d1a6b71e7c30758007o68TwFDn1k66vCc7YDzZM-rAnUjCRnGBf_Ygz1FQCx1fzc4eE2peDdogXfPIZYbT";
-
-// const authentication = ApiKeyManager.fromKey(apiKey);
-const { log } = require("handlebars");
-const { ObjectId } = require("mongodb");
 const fs = require("fs");
 const path = require("path");
-const { request } = require("http");
-const { register } = require("module");
-const AVATAR_PATH = "/uploads/agency_image";
 
 //Add default admin
 (async function deafultAdminsignup(req, res) {
@@ -797,164 +783,6 @@ async function agencyFPassword(req, res) {
           data: {},
         });
       });
-
-    //   const transporter = nodemailer.createTransport({
-    //     service: "gmail",
-    //     auth: {
-    //       user: "info@myrealestate-ng.com",
-    //       pass: "spasebcjogarhnrt",
-    //     },
-    //   });
-    //   const htmlTemplate = `
-    //     <!DOCTYPE html>
-    //     <html lang="en">
-    //     <head>
-    //         <meta charset="UTF-8">
-    //         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    //         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    //         <title>Forgot Password</title>
-    //         <style>
-    //             *, body, p {
-    //                 margin: 0;
-    //                 padding: 0;
-    //             }
-    //             body {
-    //                 overflow: hidden;
-    //                 overflow-y: auto;
-    //                 font-family: 'Montserrat', sans-serif;
-    //                 font-weight: 500;
-    //             }
-    //             .qop {
-    //                 background-color: white;
-    //                 border: 2px solid #001BEA;
-    //                 color: green;
-    //                 padding: 12px 10px;
-    //                 text-align: center;
-    //                 display: inline-block;
-    //                 font-size: 20px;
-    //                 margin: 10px 30px;
-    //                 cursor: pointer;
-    //             }
-    //         </style>
-    //     </head>
-    //     <body>
-    //         <table cellspacing="0" border="0" cellpadding="0" width="100%" bgcolor="#f2f3f8"
-    //         style="@import url(https://fonts.googleapis.com/css?family=Rubik:300,400,50https://res.cloudinary.com/dqffs1rxq/image/upload/v1663149858/logo_sxtkrk.png0,700|Open+Sans:300,400,600,700); font-family: 'Open Sans', sans-serif; padding-top: 20px;  ">
-    //         <tr>
-    //         <td>
-    //             <table style="max-width:670px; margin:0 auto;  position: absolute;
-    //                 top: 50%;
-    //                 left: 50%;
-    //                 transform: translate(-50% , -50%);padding: 0 15px;" width="100%" border="0"
-    //                 align="center" cellpadding="0" cellspacing="0">
-    //                 <tr>
-    //                     <td>
-    //                     <table width="100%" style="border:0; border-spacing:0">
-    //                         <tr>
-    //                             <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
-    //                             </tr>
-    //                     </table>
-    //                     <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0"
-    //                         style="max-width:670px; background:#fff; border-radius:3px; text-align:center;">
-    //                         <tr>
-    //                             <td style="height:40px;">&nbsp;</td>
-    //                         </tr>
-    //                         <tr>
-    //                             <td style="text-align:center;">
-    //                                 <img src="https://myrealestate.ng/static/media/logoSmall.c865497de0bfca834259.png" title="logo" alt="logo"> 
-    //                             </td>
-    //                         </tr>
-    //                         <tr>
-    //                             <td style="padding:0 35px;">
-    //                                 <p
-    //                                 style="font-size:28px; color:#001BEA; margin:35px 0 0; line-height:24px; font-weight: bold;">
-    //                                 Forgot Password Verification Link
-    //                                 </span>
-    //                                 </p>
-    //                                 <p
-    //                                 style="color:#001BEA; font-size:18px;line-height:23px; margin:0; font-weight: 500; margin-top: 20px;">
-    //                                 <h3><strong> 
-
-    //                                   <a href="${link}" class="GFG">
-    //                                     <button style="border: 2px solid #001BEA; padding: 12px 27px; cursor: pointer; border-radius: 21px; font-size: 18px; background: rgb(0 27 234 / 22%);">
-    //                                         Click Here To Reset Password
-    //                                     </button>
-    //                                     </a>
-    //                                 </strong></h3>
-
-    //                                 </p>
-
-    //                             </td>
-    //                         </tr>
-    //                     </table>
-    //                     <table width="100%" style="border:0; border-spacing:0">
-    //                         <tr>
-    //                             <td style="height:40px;background-color: white; border:0; padding:0px" >&nbsp;</td>
-    //                             </tr>
-    //                     </table>
-    //                     </td>
-    //                 </tr>
-    //                 <tr>
-    //                     <td style="height:100px; background-color: white ">&nbsp;</td>
-    //                 </tr>
-    //                 <tr>
-    //                     <td style="height:50px; background-color: transparent ">&nbsp;</td>
-    //                 </tr>
-    //                 <tr>
-    //                     <td style="text-align:center; background-color: transparent;">
-    //                     <p
-    //                         style="font-size:14px; color:#9f9f9f; line-height:18px; margin:0 0 0; font-weight: bold;padding-bottom: 20px;">
-
-    //                         Sent with <span style="margin-top:2px;"> <img src="https://res.cloudinary.com/dqffs1rxq/image/upload/v1663151795/heart_clyvbj.png" alt=""
-    //                             width="15px" height="15px"> </span> from <span
-    //                             style="background-color:#fce293 ;margin-left: 3px;">  Team myrealestate-ng </span>
-    //                         </span>
-    //                     </p>
-    //                     </td>
-    //                 </tr>
-    //             </table>
-    //         </td>
-    //         </tr>
-    //         </table>
-    //         <!--/100% body table-->
-
-    //     </body>
-    //     </html>
-    //   `;
-
-    //   const mailOptions = {
-    //     from: 'info@myrealestate-ng.com',
-    //     to: result.email,
-    //     subject: "Link to reset the password",
-    //     html: htmlTemplate,
-    //   };
-
-    //   console.log("test");
-
-    //   transporter.sendMail(mailOptions, function (error, info) {
-    //     if (error) {
-    //       console.log(error);
-    //       res.status(HTTP.SUCCESS).send({
-    //         status: false,
-    //         code: HTTP.BAD_REQUEST,
-    //         message: "Unable to send email!",
-    //         data: {},
-    //       });
-    //     } else {
-    //       console.log("Email sent: " + info.response);
-    //       res.status(HTTP.SUCCESS).send({
-    //         status: true,
-    //         code: HTTP.SUCCESS,
-    //         message: "Please check your email.",
-    //         data: {},
-    //       });
-    //     }
-    //   });
-    //   return res.status(HTTP.SUCCESS).send({
-    //     status: true,
-    //     code: HTTP.SUCCESS,
-    //     data: { token: token },
-    //   });
   } catch (err) {
     console.log(err);
     return res.status(HTTP.SUCCESS).send({
