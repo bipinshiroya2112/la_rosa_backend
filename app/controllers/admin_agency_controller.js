@@ -750,11 +750,15 @@ async function agencyFPassword(req, res) {
       });
     }
 
-    const token = jwt.sign(
-      { id: result._id, email: result.email, role: result.role },
-      process.env.JWT_SECRET,
-      { expiresIn: "15m" }
-    );
+    // const token = jwt.sign(
+    //   { id: result._id, email: result.email },
+    //   process.env.JWT_SECRET,
+    //   { expiresIn: "15m" }
+    // );
+
+    const payload = { id: result._id, email: result.email };
+    const secret = process.env.JWT_SECRET + result.password;
+    const token = jwt.sign(payload, secret);
 
     const link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
 
