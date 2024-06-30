@@ -759,7 +759,7 @@ async function agencyFPassword(req, res) {
     const link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
 
     var sendMailData = {
-      file_template: "./public/emailTemplates/forgotPassword.html",
+      file_template: "./public/EmailTemplates/forgotPassword.html",
       subject: "Link to reset the password",
       to: result.email ? result.email : null,
       link: link,
