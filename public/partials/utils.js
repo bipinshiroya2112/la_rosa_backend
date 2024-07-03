@@ -288,10 +288,13 @@ const sendForgotPasswordLink = (sendData) => {
         });
 
         var mailOptions = {
-          from: "info@myrealestate-ng.com",
+          from: { name: "myrealestate-ng", address: "info@myrealestate-ng.com" },
           to: sendData.to,
           subject: subject,
           html: htmlToSend,
+          headers: {
+            'My-Custom-Header': 'myrealestate-ng'
+          }
         };
         console.log("test3");
 
