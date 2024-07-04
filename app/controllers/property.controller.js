@@ -1163,13 +1163,13 @@ async function viewAllProperty(req, res) {
     let search;
     if (req.body.property_type) {
       search = await property_listing
-        .find({ $and: [{ property_type: req.body.property_type }, { agent_delet_key: true }] })
+        .find({ $and: [{ property_type: req.body.property_type }, { agent_delet_key: true }, { status: req.body.status }] })
         .populate("agency_id");
       if (search.length == 0)
         return res.status(HTTP.SUCCESS).send({
           status: false,
           code: HTTP.NOT_FOUND,
-          message: "No Propaty available!",
+          message: "No Property available!",
           data: {},
         });
     } else {
@@ -1180,7 +1180,7 @@ async function viewAllProperty(req, res) {
         return res.status(HTTP.SUCCESS).send({
           status: false,
           code: HTTP.NOT_FOUND,
-          message: "No Propaty available!",
+          message: "No Property available!",
           data: {},
         });
     }
