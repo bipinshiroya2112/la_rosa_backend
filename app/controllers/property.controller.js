@@ -1160,16 +1160,31 @@ async function propertyByAgency(req, res) {
 async function viewAllProperty(req, res) {
   try {
     listings = [];
-    let search = await property_listing
-      .find({ $and: [{ status: req.body.status }, { agent_delet_key: true }] })
-      .populate("agency_id");
-    if (search.length == 0)
-      return res.status(HTTP.SUCCESS).send({
-        status: false,
-        code: HTTP.NOT_FOUND,
-        message: "No Propaty available!",
-        data: {},
-      });
+    let search;
+    if (req.body.property_type) {
+      search = await property_listing
+        .find({ $and: [{ property_type: req.body.property_type }, { agent_delet_key: true }] })
+        .populate("agency_id");
+      if (search.length == 0)
+        return res.status(HTTP.SUCCESS).send({
+          status: false,
+          code: HTTP.NOT_FOUND,
+          message: "No Propaty available!",
+          data: {},
+        });
+    } else {
+      search = await property_listing
+        .find({ $and: [{ status: req.body.status }, { agent_delet_key: true }] })
+        .populate("agency_id");
+      if (search.length == 0)
+        return res.status(HTTP.SUCCESS).send({
+          status: false,
+          code: HTTP.NOT_FOUND,
+          message: "No Propaty available!",
+          data: {},
+        });
+    }
+
 
     for (const data of search) {
       const agent = await admin_agent.findOne({ _id: data.lead_agent });

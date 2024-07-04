@@ -4,14 +4,14 @@ const MONGODB = process.env.MONGODB;
 async function connect() {
     try {
         // console.log("MONGODB================", MONGODB);
-        // mongoose.connection.on('error', (err) => {
-        //     console.error(`MongoDB connection error: `, err);
-        //     process.exit(-1);
-        // });
+        mongoose.connection.on('error', (err) => {
+            console.error(`MongoDB connection error: `, err);
+            process.exit(-1);
+        });
 
-        // mongoose.connection.on('connection', () => {
-        //     console.log(`MongoDB established`);
-        // });
+        mongoose.connection.on('connection', () => {
+            console.log(`MongoDB established`);
+        });
         mongoose
             .connect(`${MONGODB}/larosaBackend?retryWrites=true&w=majority`, {
                 bufferCommands: true
