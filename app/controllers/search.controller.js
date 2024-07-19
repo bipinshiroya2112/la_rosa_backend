@@ -538,346 +538,247 @@ async function sortProperty(req, res) {
 
 //================================================================  sort agent   ===========================================================================
 
-async function sortAgent(req, res) {
+const sortAgent = async (req, res) => {
   try {
     console.log("🚀 ~ sortAgent ~ req.body----------->>>>>>>>>>>>>", req.body);
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------
-    if (req.body.sort_by == "number_of_properties_sold") {
-      const agents = await admin_agent
-        .aggregate([
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-            },
-          },
-        ])
-        .sort({ property_sold: -1 });
 
-      return res.status(HTTP.SUCCESS).send({
+    const sortBy = req.body.sort_by;
+
+    if (sortBy == "number_of_properties_sold" || sortBy == "total_sales_across_all_suburbs") {
+      const agents = await admin_agent.aggregate([
+        {
+          $lookup: {
+            from: "registers",
+            localField: "agency_id",
+            foreignField: "_id",
+            as: "agencyDetails",
+          },
+        },
+        {
+          $addFields: {
+            agencySmallLogo: {
+              $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
+            },
+            primary_color: {
+              $arrayElemAt: ["$agencyDetails.primary_color", 0],
+            },
+          },
+        },
+      ]).sort({ property_sold: -1 });
+
+      return res.status(200).send({
         status: true,
-        code: HTTP.SUCCESS,
-        message: "Properties",
-        data: agents,
-      });
-    }
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    if (req.body.sort_by == "suburb_sales_and_performance") {
-      // const suburb = req.body.suburb;
-      //   const result = await property_listing.aggregate([
-      //     {
-      //       $match: { suburb: suburb, status: "sold" }
-      //     },
-      //     {
-      //       $group: {
-      //         _id: null,
-      //         soldPrices: { $push: "$price" }
-      //       }
-      //     },
-      //     {
-      //       $project: {
-      //         medianSoldPrice: {
-      //           $let: {
-      //             vars: {
-      //               sortedSoldPrices: { $sort: "$soldPrices" },
-      //               count: { $size: "$soldPrices" }
-      //             },
-      //             in: {
-      //               $cond: [
-      //                 { $eq: ["$$count", 0] },
-      //                 null,
-      //                 {
-      //                   $cond: [
-      //                     { $eq: [{ $mod: ["$$count", 2] }, 0] },
-      //                     {
-      //                       $avg: [
-      //                         { $arrayElemAt: ["$$sortedSoldPrices", { $divide: ["$$count", 2] }] },
-      //                         { $arrayElemAt: ["$$sortedSoldPrices", { $subtract: [{ $divide: ["$$count", 2] }, 1] }] }]
-      //                     },
-      //                     { $arrayElemAt: ["$$sortedSoldPrices", { $floor: { $divide: ["$$count", 2] } }] }
-      //                   ]
-      //                 }
-      //               ]
-      //             }
-      //           }
-      //         }
-      //       }
-      //     }
-      //   ]);
-      //   if (result.length === 0) {
-      //     return res.status(HTTP.NOT_FOUND).send({ status: false, code: HTTP.NOT_FOUND, message: "Suburb not found or no properties sold in the suburb", data: {} });
-      //   }
-      //   const medianSoldPrice = result[0].medianSoldPrice;
-      //   return res.status(HTTP.SUCCESS).send({ status: true, code: HTTP.SUCCESS, message: "Median sold price for suburb", data: { suburb: suburb, medianSoldPrice: medianSoldPrice } });
-    }
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    if (req.body.sort_by == "property_sales_as_leadagent") {
-      admin_agent
-        .aggregate([
-          {
-            $lookup: {
-              from: "property_listings",
-              localField: "_id",
-              foreignField: "lead_agent",
-              as: "properties",
-            },
-          },
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-            },
-          },
-          {
-            $sort: {
-              leadPropertiesCount: -1,
-            },
-          },
-        ])
-        .exec((err, sortedAgents) => {
-          if (err) {
-            console.error(err);
-            return res.status(HTTP.SUCCESS).send({
-              status: false,
-              code: HTTP.INTERNAL_SERVER_ERROR,
-              message: "Error while sorting Agents!",
-              data: {},
-            });
-          } else {
-            return res.status(HTTP.SUCCESS).send({
-              status: true,
-              code: HTTP.SUCCESS,
-              message: "Properties",
-              data: sortedAgents,
-            });
-          }
-        });
-    }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    if (req.body.sort_by == "number_of_reviews") {
-      admin_agent
-        .aggregate([
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-            },
-          },
-          {
-            $addFields: {
-              reviewsCount: { $size: "$reviews" },
-            },
-          },
-          {
-            $sort: {
-              reviewsCount: -1,
-            },
-          },
-          {
-            $project: {
-              agencyDetails: 0,
-            },
-          },
-        ])
-        .exec((err, sortedAgents) => {
-          if (err) {
-            console.error(err);
-            return res.status(HTTP.SUCCESS).send({
-              status: false,
-              code: HTTP.INTERNAL_SERVER_ERROR,
-              message: "Error while sorting Agents!",
-              data: {},
-            });
-          } else {
-            // console.log(sortedAgents);
-            return res.status(HTTP.SUCCESS).send({
-              status: true,
-              code: HTTP.SUCCESS,
-              message: "Properties",
-              data: sortedAgents,
-            });
-          }
-        });
-    }
-
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-    if (req.body.sort_by == "median_sold_price") {
-      // const agents = await admin_agent.find({}).sort({ medianPrice: -1 })
-
-      const agents = await admin_agent
-        .aggregate([
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-            },
-          },
-        ])
-        .sort({ medianPrice: -1 });
-
-      return res.status(HTTP.SUCCESS).send({
-        status: true,
-        code: HTTP.SUCCESS,
+        code: 200,
         message: "Properties",
         data: agents,
       });
     }
 
-    //--------------------------------------------------------------------------------------------------------------------------------------------------------------
+    if (sortBy == "suburb_sales_and_performance") {
+      const suburb = req.body.suburb;
+      const result = await property_listing.aggregate([
+        { $match: { suburb: suburb, status: "sold" } },
+        { $group: { _id: null, soldPrices: { $push: "$price" } } },
+        {
+          $project: {
+            medianSoldPrice: {
+              $cond: {
+                if: { $eq: [{ $size: "$soldPrices" }, 0] },
+                then: null,
+                else: {
+                  $let: {
+                    vars: {
+                      sortedSoldPrices: {
+                        $sortArray: {
+                          input: "$soldPrices",
+                          sortBy: 1
+                        }
+                      }, count: { $size: "$soldPrices" }
+                    },
+                    in: {
+                      $cond: [
+                        { $eq: [{ $mod: ["$$count", 2] }, 0] },
+                        {
+                          $avg: [
+                            { $arrayElemAt: ["$$sortedSoldPrices", { $divide: ["$$count", 2] }] },
+                            { $arrayElemAt: ["$$sortedSoldPrices", { $subtract: [{ $divide: ["$$count", 2] }, 1] }] },
+                          ],
+                        },
+                        { $arrayElemAt: ["$$sortedSoldPrices", { $floor: { $divide: ["$$count", 2] } }] },
+                      ],
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      ]);
 
-    if (req.body.sort_by == "years_experience") {
+      if (result.length === 0) {
+        return res.status(404).send({ status: false, code: 404, message: "Suburb not found or no properties sold in the suburb", data: {} });
+      }
+
+      const medianSoldPrice = result[0].medianSoldPrice;
+      return res.status(200).send({ status: true, code: 200, message: "Median sold price for suburb", data: { suburb: suburb, medianSoldPrice: medianSoldPrice } });
+    }
+
+    if (sortBy == "property_sales_as_leadagent") {
+      const sortedAgents = await admin_agent.aggregate([
+        {
+          $lookup: {
+            from: "property_listings",
+            localField: "_id",
+            foreignField: "lead_agent",
+            as: "properties",
+          },
+        },
+        {
+          $lookup: {
+            from: "registers",
+            localField: "agency_id",
+            foreignField: "_id",
+            as: "agencyDetails",
+          },
+        },
+        {
+          $addFields: {
+            primary_color: {
+              $arrayElemAt: ["$agencyDetails.primary_color", 0],
+            },
+            agencySmallLogo: {
+              $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
+            },
+          },
+        },
+        {
+          $addFields: {
+            leadPropertiesCount: { $size: "$properties" },
+          },
+        },
+        { $sort: { leadPropertiesCount: -1 } },
+      ]);
+
+      return res.status(200).send({
+        status: true,
+        code: 200,
+        message: "Properties",
+        data: sortedAgents,
+      });
+    }
+
+    if (sortBy == "number_of_reviews") {
+      const sortedAgents = await admin_agent.aggregate([
+        {
+          $lookup: {
+            from: "registers",
+            localField: "agency_id",
+            foreignField: "_id",
+            as: "agencyDetails",
+          },
+        },
+        {
+          $addFields: {
+            primary_color: {
+              $arrayElemAt: ["$agencyDetails.primary_color", 0],
+            },
+            agencySmallLogo: {
+              $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
+            },
+            reviewsCount: { $size: "$reviews" },
+          },
+        },
+        { $sort: { reviewsCount: -1 } },
+        { $project: { agencyDetails: 0 } },
+      ]);
+
+      return res.status(200).send({
+        status: true,
+        code: 200,
+        message: "Properties",
+        data: sortedAgents,
+      });
+    }
+
+    if (sortBy == "median_sold_price") {
+      const agents = await admin_agent.aggregate([
+        {
+          $lookup: {
+            from: "registers",
+            localField: "agency_id",
+            foreignField: "_id",
+            as: "agencyDetails",
+          },
+        },
+        {
+          $addFields: {
+            primary_color: {
+              $arrayElemAt: ["$agencyDetails.primary_color", 0],
+            },
+            agencySmallLogo: {
+              $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
+            },
+          },
+        },
+      ]).sort({ medianPrice: -1 });
+
+      return res.status(200).send({
+        status: true,
+        code: 200,
+        message: "Properties",
+        data: agents,
+      });
+    }
+
+    if (sortBy == "years_experience") {
       const currentYear = new Date().getFullYear();
 
-      admin_agent
-        .aggregate([
-          {
-            $addFields: {
-              experience: {
-                $subtract: [currentYear, "$start_year_in_industry"],
-              },
+      const sortedAgents = await admin_agent.aggregate([
+        {
+          $addFields: {
+            experience: { $subtract: [currentYear, "$start_year_in_industry"] },
+          },
+        },
+        { $sort: { experience: -1 } },
+        {
+          $lookup: {
+            from: "registers",
+            localField: "agency_id",
+            foreignField: "_id",
+            as: "agencyDetails",
+          },
+        },
+        {
+          $addFields: {
+            primary_color: {
+              $arrayElemAt: ["$agencyDetails.primary_color", 0],
+            },
+            agencySmallLogo: {
+              $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
             },
           },
-          {
-            $sort: {
-              experience: -1,
-            },
-          },
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-            },
-          },
-        ])
-        .exec((err, sortedAgents) => {
-          if (err) {
-            console.error(err);
-            return res.status(HTTP.SUCCESS).send({
-              status: false,
-              code: HTTP.INTERNAL_SERVER_ERROR,
-              message: "Error while sorting Agents!",
-              data: {},
-            });
-          } else {
-            // console.log(sortedAgents);
-            return res.status(HTTP.SUCCESS).send({
-              status: true,
-              code: HTTP.SUCCESS,
-              message: "Properties",
-              data: sortedAgents,
-            });
-          }
-        });
-    }
-    //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-    if (req.body.sort_by == "total_sales_across_all_suburbs") {
-      const agents = await admin_agent
-        .aggregate([
-          {
-            $lookup: {
-              from: "registers",
-              localField: "agency_id",
-              foreignField: "_id",
-              as: "agencyDetails",
-            },
-          },
-          {
-            $addFields: {
-              primary_color: {
-                $arrayElemAt: ["$agencyDetails.primary_color", 0],
-              },
-              agencySmallLogo: {
-                $arrayElemAt: ["$agencyDetails.agencySmallLogo", 0],
-              },
-            },
-          },
-        ])
-        .sort({ property_sold: -1 });
+        },
+      ]);
 
-      return res.status(HTTP.SUCCESS).send({
+      return res.status(200).send({
         status: true,
-        code: HTTP.SUCCESS,
+        code: 200,
         message: "Properties",
-        data: agents,
+        data: sortedAgents,
       });
     }
 
-    //-------------------------------------------------------------------------------------------------------------------------------------------------------------------
   } catch (error) {
     console.log("🚀 ~ sortAgent ~ error:", error);
-    return res.status(HTTP.SUCCESS).send({
+    return res.status(500).send({
       status: false,
-      code: HTTP.INTERNAL_SERVER_ERROR,
+      code: 500,
       message: "Something went wrong!",
       data: {},
     });
   }
-}
+};
+
 
 //================================================================  Search Agent By Suburb  ==========================================================================
 
