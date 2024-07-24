@@ -63,12 +63,12 @@ const propertySchema = new Schema(
     municipality: {
       type: String,
     },
-    auction_result: {
-      type: String,
-    },
-    maximum_bid: {
-      type: Number,
-    },
+    // auction_result: {
+    //   type: String,
+    // },
+    // maximum_bid: {
+    //   type: Number,
+    // },
     Bedrooms: {
       type: String,
     },
