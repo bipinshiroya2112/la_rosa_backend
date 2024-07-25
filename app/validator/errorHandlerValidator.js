@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const HTTP = { SUCCESS: 200, NOT_ALLOWED: 400 };
+const { BAD_REQUEST } = require('../../constants/responseCode.constant');
 
 const ErrorHandlerValidator = (req, res, next) => {
   const errors = validationResult(req);
@@ -8,9 +8,9 @@ const ErrorHandlerValidator = (req, res, next) => {
       acc[err.param] = err.msg;
       return acc;
     }, {});
-    return res.status(HTTP.NOT_ALLOWED).json({
+    return res.status(BAD_REQUEST).json({
       status: false,
-      code: HTTP.NOT_ALLOWED,
+      code: BAD_REQUEST,
       message: errorMsg.undefined
     });
   }
