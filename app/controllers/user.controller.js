@@ -25,6 +25,7 @@ const { log } = require("handlebars");
 const property_listing = require("../models/property_listing");
 const contact = require("../models/contactusmodel");
 const { request } = require("http");
+const AdvertiseModel = require("../models/advertise.model");
 // const serviceID = "VAe2e2e9000916b9296ac0a737e822b587"
 // const accountsID = "ACa15e8faf0a240436169630f2712e47b3"
 // const authToken = "85302ad861c5fff587d6ab6dc07c381e"
@@ -1924,6 +1925,28 @@ const updatePassword = async (req, res) => {
   }
 }
 
+const addAdvertise = async (req, res) => {
+  try {
+    let { advertiseType, companyName, email, fullName, phoneNumber } = req.body;
+
+    await AdvertiseModel.create({ advertiseType, companyName, email, fullName, phoneNumber })
+
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "advertise enquiry submitted.",
+      data: {},
+    });
+  } catch (error) {
+    console.error("Error add advertise:", error);
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
 module.exports = {
   dashboard,
   signup,
@@ -1954,7 +1977,7 @@ module.exports = {
   latestAgent,
   loginWithGoogle,
   loginWithFacebook,
-
+  addAdvertise,
   deleteAccount,
   signOutAll,
   propertyData,
