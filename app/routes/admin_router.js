@@ -11,7 +11,6 @@ const property_upload = require("../middlewares/property.upload");
 // admin default sign up
 // admin login
 
-
 // =========================  view page :- 2 =========================
 router.get('/admin/TotalCount', authagency, adminController.TotalCount);
 router.get('/admin/ViewAllAgency', authagency, adminController.ViewAllAgency);
@@ -40,6 +39,9 @@ router.post('/admin/Listing/create', upload, authagency, adminController.Listing
 router.post('/admin/Listing/view/:id', authagency, adminController.listingView);
 router.post('/admin/Listing/edit/:id', upload, authagency, adminController.Listingedit);
 router.post('/admin/Listing/delete/:id', authagency, adminController.propertyDelete);
+
+//=========================  page :- 6 =========================
+router.get('/advertise/list', adminController.getListAdvertise);
 
 //=============================== user ============================
 router.get("/admin/ViewAllUser", authagency, adminController.viewallUser);
