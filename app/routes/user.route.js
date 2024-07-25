@@ -80,8 +80,6 @@ router.get("/latestagent", userControllers.latestAgent);
 
 router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, userControllers.addAdvertise)
 
-
-
 router.post("/deleteAccount", userControllers.deleteAccount);
 router.get("/signOutAll", userControllers.signOutAll);
 router.get("/propertyData/:id", userControllers.propertyData);

@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const HTTP = { SUCCESS: 200, NOT_ALLOWED: 405 };
+const HTTP = { SUCCESS: 200, NOT_ALLOWED: 400 };
 
 const ErrorHandlerValidator = (req, res, next) => {
   const errors = validationResult(req);
