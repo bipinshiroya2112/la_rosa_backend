@@ -1,5 +1,5 @@
 const { validationResult } = require('express-validator');
-const { BAD_REQUEST } = require('../../constants/responseCode.constant');
+const { BAD_REQUEST, SUCCESS } = require('../../constants/responseCode.constant');
 
 const ErrorHandlerValidator = (req, res, next) => {
   const errors = validationResult(req);
@@ -8,7 +8,7 @@ const ErrorHandlerValidator = (req, res, next) => {
       acc[err.param] = err.msg;
       return acc;
     }, {});
-    return res.status(BAD_REQUEST).json({
+    return res.status(SUCCESS).json({
       status: false,
       code: BAD_REQUEST,
       message: errorMsg.undefined
