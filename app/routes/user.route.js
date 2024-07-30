@@ -3,12 +3,7 @@ const router = express.Router();
 const userControllers = require("../controllers/user.controller");
 const userdetaislControllers = require("../controllers/userdetails.controller");
 const propertyControllers = require("../controllers/property.controller");
-
-const {
-  verifyToken,
-  verifyResetPasswordToken,
-  authagency,
-} = require("../middlewares/verifyToken");
+const { verifyToken, verifyResetPasswordToken, authagency } = require("../middlewares/verifyToken");
 const { authUser } = require("../middlewares/verifyToken");
 const { auth } = require("../middlewares/verifyToken");
 const ErrorHandlerValidator = require("../validator/errorHandlerValidator");
@@ -78,6 +73,7 @@ router.post("/contact_us", userControllers.contact_us);
 router.get("/propaties", userControllers.propaties);
 router.get("/latestagent", userControllers.latestAgent);
 
+// add advertise 
 router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, userControllers.addAdvertise)
 
 router.post("/deleteAccount", userControllers.deleteAccount);

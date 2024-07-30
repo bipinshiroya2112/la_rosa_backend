@@ -2377,6 +2377,39 @@ const getListAdvertise = async (req, res) => {
   }
 }
 
+const statusUpdate = async (req, res) => {
+  try {
+    const { id } = req.params
+    const { updateStatus } = req.body
+    const details = await AdvertiseModel.updateOne(
+      { _id: id },
+      { $set: { status: updateStatus } }
+    );
+
+    if (details.nModified === 0) {
+      return res.status(HTTP.SUCCESS).json({
+        status: false,
+        code: HTTP.NOT_FOUND,
+        error: "Advertise detail not found.",
+      });
+    } else {
+      return res.status(HTTP.SUCCESS).json({
+        status: true,
+        code: HTTP.SUCCESS,
+        message: "Advertise status updated.",
+        data: {},
+      });
+    }
+  } catch (error) {
+    console.error("Error advertise status", error);
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
 //==============================================================  google map  ======================================================================
 
 //===============================================================================================================================
@@ -2406,4 +2439,5 @@ module.exports = {
   viewallUser,
   Userdelete,
   userBlock,
+  statusUpdate
 };

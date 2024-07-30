@@ -20,6 +20,10 @@ const advertiseSchema = new mongoose.Schema({
   advertiseType: {
     type: String,
     isRequired: true
+  },
+  status: {
+    type: String,
+    isRequired: true
   }
 }, {
   timestamps: true,

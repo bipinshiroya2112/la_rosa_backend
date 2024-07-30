@@ -42,6 +42,7 @@ router.post('/admin/Listing/delete/:id', authagency, adminController.propertyDel
 
 //=========================  page :- 6 =========================
 router.get('/advertise/list', adminController.getListAdvertise);
+router.post('/advertise/status/:id', adminController.statusUpdate);
 
 //=============================== user ============================
 router.get("/admin/ViewAllUser", authagency, adminController.viewallUser);
