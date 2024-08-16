@@ -40,10 +40,6 @@ router.post('/admin/Listing/view/:id', authagency, adminController.listingView);
 router.post('/admin/Listing/edit/:id', upload, authagency, adminController.Listingedit);
 router.post('/admin/Listing/delete/:id', authagency, adminController.propertyDelete);
 
-//=========================  page :- 6 =========================
-router.get('/advertise/list', adminController.getListAdvertise);
-router.post('/advertise/status/:id', adminController.statusUpdate);
-
 //=============================== user ============================
 router.get("/admin/ViewAllUser", authagency, adminController.viewallUser);
 router.post("/admin/User/delete/:id", authagency, adminController.Userdelete);

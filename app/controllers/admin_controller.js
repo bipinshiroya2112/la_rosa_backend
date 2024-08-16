@@ -14,7 +14,6 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 var unirest = require("unirest");
-const AdvertiseModel = require("../models/advertise.model");
 
 async function TotalCount(req, res) {
   try {
@@ -2356,60 +2355,6 @@ async function userBlock(req, res) {
   }
 }
 
-
-
-const getListAdvertise = async (req, res) => {
-  try {
-    const details = await AdvertiseModel.find({});
-    return res.status(HTTP.SUCCESS).json({
-      status: true,
-      code: HTTP.SUCCESS,
-      message: "Advertise list get successfully.",
-      data: details,
-    });
-  } catch (error) {
-    console.error("Error advertise list", error);
-    res.status(HTTP.SUCCESS).json({
-      status: false,
-      code: HTTP.INTERNAL_SERVER_ERROR,
-      error: "Internal Server Error",
-    });
-  }
-}
-
-const statusUpdate = async (req, res) => {
-  try {
-    const { id } = req.params
-    const { updateStatus } = req.body
-    const details = await AdvertiseModel.updateOne(
-      { _id: id },
-      { $set: { status: updateStatus } }
-    );
-
-    if (details.nModified === 0) {
-      return res.status(HTTP.SUCCESS).json({
-        status: false,
-        code: HTTP.NOT_FOUND,
-        error: "Advertise detail not found.",
-      });
-    } else {
-      return res.status(HTTP.SUCCESS).json({
-        status: true,
-        code: HTTP.SUCCESS,
-        message: "Advertise status updated.",
-        data: {},
-      });
-    }
-  } catch (error) {
-    console.error("Error advertise status", error);
-    res.status(HTTP.SUCCESS).json({
-      status: false,
-      code: HTTP.INTERNAL_SERVER_ERROR,
-      error: "Internal Server Error",
-    });
-  }
-}
-
 //==============================================================  google map  ======================================================================
 
 //===============================================================================================================================
@@ -2434,10 +2379,8 @@ module.exports = {
   ListingCreate,
   listingView,
   Listingedit,
-  getListAdvertise,
   propertyDelete,
   viewallUser,
   Userdelete,
-  userBlock,
-  statusUpdate
+  userBlock
 };

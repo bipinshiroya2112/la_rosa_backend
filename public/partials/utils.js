@@ -364,11 +364,68 @@ const sendContactusemail = (sendData) => {
     console.log(err);
   }
 };
+
+const sendAdvertiseEmail = (sendData) => {
+  try {
+    return new Promise(async (resolve, reject) => {
+      try {
+        var file_template = sendData.file_template;
+        var subject = sendData.subject;
+        console.log("subject", subject);
+
+        let transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: "info@myrealestate-ng.com",
+            pass: "spasebcjogarhnrt",
+          },
+          tls: { rejectUnauthorized: false }
+        });
+
+        fs.readFile(file_template, { encoding: "utf-8" }, function (err, html) {
+          if (err) {
+            console.log("File read error: " + err);
+            return reject({ status: false, data: [], message: "Could not read email template file!" });
+          }
+
+          var template = handlebars.compile(html);
+          var htmlToSend = template(sendData);
+
+          var mailOptions = {
+            from: "info@myrealestate-ng.com",
+            to: sendData.to,
+            subject: subject,
+            html: htmlToSend,
+          };
+
+          transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+              console.log("error" + error);
+              return { status: false, data: [], message: "Could not send mail!" };
+            }
+            console.log("info " + info);
+            console.log("Message sent: %s", info.messageId);
+            console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+            resolve({ status: true, data: [], message: "Mail sent!" });
+          });
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   formateUserData,
   checkSessionExpiration,
   createSessionAndJwtToken,
   // sendEmail,
+  sendAdvertiseEmail,
   sendForgotPasswordLink,
   sendEmailOTP,
   sendContactusemail,

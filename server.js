@@ -12,6 +12,7 @@ const passport = require('passport')
 const userRouter = require('./app/routes/user.route')
 const adminAgencyRouter = require('./app/routes/admin_Agency_router')
 const admin_router = require('./app/routes/admin_router')
+const advertiseRouter = require('./app/routes/advertise.router')
 const multer = require('multer');
 const upload = multer();
 const vercel = require('@vercel/blob/client');
@@ -46,6 +47,7 @@ app.use(cookieParser());
 app.use(userRouter);
 app.use(adminAgencyRouter)
 app.use(admin_router)
+app.use(advertiseRouter)
 
 app.post("/api/image/upload", upload.fields({}), async (req, res) => {
   try {

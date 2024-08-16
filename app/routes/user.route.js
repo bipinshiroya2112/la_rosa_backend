@@ -7,7 +7,6 @@ const { verifyToken, verifyResetPasswordToken, authagency } = require("../middle
 const { authUser } = require("../middlewares/verifyToken");
 const { auth } = require("../middlewares/verifyToken");
 const ErrorHandlerValidator = require("../validator/errorHandlerValidator");
-const AdvertiseValidator = require("../validator/advertiseValidator");
 
 //=============================== Authentication ===================================
 // signup
@@ -72,9 +71,6 @@ router.post("/comparision", userControllers.compareAgents);
 router.post("/contact_us", userControllers.contact_us);
 router.get("/propaties", userControllers.propaties);
 router.get("/latestagent", userControllers.latestAgent);
-
-// add advertise 
-router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, userControllers.addAdvertise)
 
 router.post("/deleteAccount", userControllers.deleteAccount);
 router.get("/signOutAll", userControllers.signOutAll);
