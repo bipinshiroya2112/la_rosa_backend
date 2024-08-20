@@ -24,10 +24,6 @@ const advertiseSchema = new mongoose.Schema({
   status: {
     type: String,
     isRequired: true
-  },
-  registerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Register'
   }
 }, {
   timestamps: true,
