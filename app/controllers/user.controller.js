@@ -1844,7 +1844,6 @@ async function signOutAll(req, res) {
 
 async function propertyData(req, res) {
   const id = req.params.id;
-  console.log("id::::::::::::::>>>>>>>>>>>>", id);
   try {
     const soldCount = await property_listing.find({
       lead_agent: id.toString(),

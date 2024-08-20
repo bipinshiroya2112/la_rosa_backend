@@ -66,7 +66,7 @@ async function signin(req, res) {
     }
     // const encData = await encryptUserModel({ email })
 
-    const adminExists = await Register.findOne({ email: req.body.email });
+    const adminExists = await Register.findOne({ email: req.body.email, role: role });
 
     if (!adminExists) {
       return res.status(HTTP.SUCCESS).send({
@@ -77,13 +77,13 @@ async function signin(req, res) {
       });
     }
 
-    if (adminExists.role !== "admin")
-      return res.status(HTTP.SUCCESS).send({
-        status: false,
-        code: HTTP.BAD_REQUEST,
-        message: "Invalid credentials.",
-        data: {},
-      });
+    // if (adminExists.role !== "admin" || adminExists.role !== "advertise")
+    //   return res.status(HTTP.SUCCESS).send({
+    //     status: false,
+    //     code: HTTP.BAD_REQUEST,
+    //     message: "Invalid credentials.",
+    //     data: {},
+    //   });
 
     if (!bcrypt.compareSync(password, adminExists.password)) {
       return res.status(HTTP.SUCCESS).send({
@@ -244,6 +244,8 @@ async function forgotPassword(req, res) {
 
     if (result.role == "admin") {
       link = `${process.env.REACT_MAINADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
+    } else if (result.role == "advertise") {
+      link = `${process.env.REACT_ADVERTISE_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
     } else {
       link = `${process.env.REACT_ADMIN_APP_WEB_URL}/auth/reset-password/${result.id}/${token}`;
     }
@@ -402,7 +404,7 @@ async function setNewPassword(req, res) {
 
     // Input validation
     if (!password || !cpassword || !id || !oldpass) {
-      return res.status(400).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "All fields are required",
         data: {},
@@ -412,7 +414,7 @@ async function setNewPassword(req, res) {
     // Fetch user by ID
     const user = await Register.findById(id);
     if (!user) {
-      return res.status(404).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "User not found",
         data: {},
@@ -422,7 +424,7 @@ async function setNewPassword(req, res) {
     // Verify old password
     const isPasswordMatch = await bcrypt.compare(oldpass, user.password);
     if (!isPasswordMatch) {
-      return res.status(401).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "Old password does not match",
         data: {},
@@ -431,7 +433,7 @@ async function setNewPassword(req, res) {
 
     // Check if new password and confirm password match
     if (password !== cpassword) {
-      return res.status(400).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "New password and confirm password do not match",
         data: {},
@@ -440,7 +442,7 @@ async function setNewPassword(req, res) {
 
     // Validate password length
     if (password.length < 8 || password.length > 16) {
-      return res.status(400).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "Password must be between 8 to 16 characters",
         data: {},
@@ -458,7 +460,7 @@ async function setNewPassword(req, res) {
     );
 
     if (!updatedUser) {
-      return res.status(500).json({
+      return res.status(HTTP.SUCCESS).json({
         status: false,
         message: "Failed to update password",
         data: {},

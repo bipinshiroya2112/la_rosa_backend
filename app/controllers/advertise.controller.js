@@ -87,14 +87,18 @@ const statusUpdate = async (req, res) => {
 
       const salt = genSaltSync(10);
 
-      await Register.create({
+      const result = await Register.create({
         email: details.email,
         password: hashSync(password, salt),
         role: 'advertise',
         phoneNumber: details.phoneNumber,
-        firstName: details.fullName
+        firstName: details.fullName,
+        advertiseIds: id
       });
-
+      await AdvertiseModel.findOneAndUpdate(
+        { _id: id },
+        { "registerId": result._id }
+      )
       var sendMailData = {
         file_template: "./public/EmailTemplates/create_client.html",
         subject: "Congratulation dear vendor Laro-sa",
