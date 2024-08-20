@@ -93,7 +93,6 @@ const statusUpdate = async (req, res) => {
         role: 'advertise',
         phoneNumber: details.phoneNumber,
         firstName: details.fullName,
-        advertiseIds: id
       });
 
       var sendMailData = {
