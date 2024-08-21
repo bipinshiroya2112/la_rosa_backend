@@ -150,7 +150,7 @@ const adminSchema = new Schema(
     advertiseIds: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Advertise",
+        ref: "advertise_list",
       },
     ],
   },

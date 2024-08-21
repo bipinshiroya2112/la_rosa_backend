@@ -509,7 +509,6 @@ async function Login(req, res) {
       data: {
         userData: {
           id: result._id,
-
           email: result.email,
           role: result.role,
         },

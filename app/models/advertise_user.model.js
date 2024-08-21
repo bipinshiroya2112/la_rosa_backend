@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const advertiseSchema = new mongoose.Schema({
+const advertiseUserSchema = new mongoose.Schema({
   phoneNumber: {
     type: Number,
     isRequired: true
@@ -28,6 +28,6 @@ const advertiseSchema = new mongoose.Schema({
 }, {
   timestamps: true,
 })
-const AdvertiseModel = mongoose.model("Advertise", advertiseSchema);
+const AdvertiseUserModel = mongoose.model("advertise_user", advertiseUserSchema);
 
-module.exports = AdvertiseModel
+module.exports = AdvertiseUserModel

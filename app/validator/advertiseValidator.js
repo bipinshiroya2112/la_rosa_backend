@@ -8,4 +8,14 @@ const AdvertiseValidator = [
   body('phoneNumber').notEmpty().withMessage('Phone number is required'),
 ]
 
-module.exports = AdvertiseValidator
+const AddAdvertiseValidator = [
+  body('advertiseType').notEmpty().withMessage('Advertise type is required'),
+  body('title').notEmpty().withMessage('Title is required'),
+  body('city').notEmpty().withMessage('City is required'),
+  body('description').notEmpty().withMessage('Description is required'),
+  body('link').notEmpty().withMessage('Link is required'),
+  body('companyLogoImage').notEmpty().withMessage('Company logo is required'),
+  body('advertiseImage').notEmpty().withMessage('Advertise property image is required'),
+]
+
+module.exports = { AdvertiseValidator, AddAdvertiseValidator }

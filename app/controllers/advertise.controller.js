@@ -1,10 +1,11 @@
-const AdvertiseModel = require('../models/advertise.model')
+const AdvertiseUserModel = require('../models/advertise_user.model')
 const HTTP = require("../../constants/responseCode.constant");
 const STATUS = require('../../constants/status.constant');
 const Register = require('../models/register')
 var generator = require('generate-password');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
 const { sendAdvertiseEmail } = require('../../public/partials/utils');
+const AdvertiseListModel = require('../models/advertise_list.model');
 
 const addAdvertise = async (req, res) => {
   try {
@@ -19,7 +20,7 @@ const addAdvertise = async (req, res) => {
         data: {},
       });
     }
-    await AdvertiseModel.create({ advertiseType, companyName, email, fullName, phoneNumber, status: STATUS.PENDING })
+    await AdvertiseUserModel.create({ advertiseType, companyName, email, fullName, phoneNumber, status: STATUS.PENDING })
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
@@ -39,7 +40,7 @@ const addAdvertise = async (req, res) => {
 
 const getListAdvertise = async (req, res) => {
   try {
-    const details = await AdvertiseModel.find({});
+    const details = await AdvertiseUserModel.find({});
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
@@ -61,7 +62,7 @@ const statusUpdate = async (req, res) => {
     const { id } = req.params;
     const { updateStatus } = req.body;
 
-    const details = await AdvertiseModel.findOneAndUpdate(
+    const details = await AdvertiseUserModel.findOneAndUpdate(
       { _id: id },
       { $set: { status: updateStatus } },
       { new: true }
@@ -139,9 +140,40 @@ const statusUpdate = async (req, res) => {
   }
 };
 
+const createAdvertise = async (req, res) => {
+  try {
+    const { advertiseType, title, city, description, link, companyLogoImage, advertiseImage } = req.body
+    await AdvertiseListModel.create({
+      advertiseType,
+      title,
+      city,
+      description,
+      link,
+      companyLogoImage,
+      advertiseImage
+    })
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Advertise add successfully.",
+      data: {},
+    });
+  } catch (error) {
+    console.error("Error add advertise", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
+
+
 
 module.exports = {
   addAdvertise,
   getListAdvertise,
-  statusUpdate
+  statusUpdate,
+  createAdvertise
 }
