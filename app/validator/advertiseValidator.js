@@ -15,7 +15,7 @@ const AddAdvertiseValidator = [
   body('description').notEmpty().withMessage('Description is required'),
   body('link').notEmpty().withMessage('Link is required'),
   body('companyLogoImage').notEmpty().withMessage('Company logo is required'),
-  body('advertiseImage').notEmpty().withMessage('Advertise property image is required'),
+  body('advertiseImage').notEmpty().withMessage('Advertise property image is required')
 ]
 
 module.exports = { AdvertiseValidator, AddAdvertiseValidator }

@@ -3,16 +3,17 @@ const router = express.Router();
 const advertiseController = require('../controllers/advertise.controller');
 const { AdvertiseValidator, AddAdvertiseValidator } = require("../validator/advertiseValidator");
 const ErrorHandlerValidator = require("../validator/errorHandlerValidator");
-const { authUser } = require("../middlewares/verifyToken");
+const { authagency } = require("../middlewares/verifyToken");
 
-// add advertise 
 router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, advertiseController.addAdvertise)
 
-// get advertise
-router.get('/advertise/list', advertiseController.getListAdvertise);
-router.post('/advertise/status/:id', advertiseController.statusUpdate);
+router.get('/advertise/list', authagency, advertiseController.getAdvertiseList)
+router.get('/advertise/:id', advertiseController.getAdvertiseDetail);
+router.get('/advertise/delete/:id', authagency, advertiseController.deleteAdvertise)
+router.post('/advertise/update/:id', authagency, advertiseController.updateAdvertise)
 
-// add advertise
-router.post('/advertise/add', authUser, AddAdvertiseValidator, ErrorHandlerValidator, advertiseController.createAdvertise)
+router.post('/advertise/status/:id', advertiseController.statusUpdate);
+router.post('/advertise/add', authagency, AddAdvertiseValidator, ErrorHandlerValidator, advertiseController.createAdvertise)
+router.get('/advertise/totalCount', authagency, advertiseController.getAdvertiseCount)
 
 module.exports = router;

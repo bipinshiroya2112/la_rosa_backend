@@ -28,6 +28,10 @@ const advertiseListSchema = new mongoose.Schema({
   advertiseImage: {
     type: String,
     isRequired: true
+  },
+  addedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "register"
   }
 }, {
   timestamps: true,

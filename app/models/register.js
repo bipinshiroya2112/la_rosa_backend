@@ -146,13 +146,7 @@ const adminSchema = new Schema(
     },
     SaveSearch: {
       type: String,
-    },
-    advertiseIds: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "advertise_list",
-      },
-    ],
+    }
   },
   { timestamps: true, versionKey: false }
 );

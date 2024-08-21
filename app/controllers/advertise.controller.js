@@ -57,6 +57,26 @@ const getListAdvertise = async (req, res) => {
   }
 }
 
+const getAdvertiseDetail = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const details = await AdvertiseListModel.findById({ _id: id });
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Get advertise successfully.",
+      data: details,
+    });
+  } catch (error) {
+    console.error("Error advertise ", error);
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
 const statusUpdate = async (req, res) => {
   try {
     const { id } = req.params;
@@ -150,7 +170,8 @@ const createAdvertise = async (req, res) => {
       description,
       link,
       companyLogoImage,
-      advertiseImage
+      advertiseImage,
+      addedBy: req.Data
     })
     return res.status(HTTP.SUCCESS).json({
       status: true,
@@ -168,6 +189,104 @@ const createAdvertise = async (req, res) => {
   }
 }
 
+const getAdvertiseList = async (req, res) => {
+  try {
+    console.log("List::>>", req.Data)
+    if (req.Data) {
+      const result = await AdvertiseListModel.find({ addedBy: req.Data });
+      return res.status(HTTP.SUCCESS).json({
+        status: true,
+        code: HTTP.SUCCESS,
+        message: "get Advertise list successfully.",
+        data: result,
+      });
+    }
+  } catch (error) {
+    console.error("Error advertise list", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
+const getAdvertiseCount = async (req, res) => {
+  try {
+    const topList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "top" });
+    const bannerList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "between" });
+    const verticalList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "vertical" });
+
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Advertise count successfully.",
+      data: {
+        totalAdvertise: topList.length + bannerList.length + verticalList.length,
+        topListLength: topList.length,
+        bannerListLength: bannerList.length,
+        verticalListLength: verticalList.length,
+      },
+    });
+  } catch (error) {
+    console.error("Error advertise count", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
+const deleteAdvertise = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await AdvertiseListModel.deleteOne({ _id: id });
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Advertise deleted successfully.",
+      data: {},
+    });
+  } catch (error) {
+    console.error("Error advertise list", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
+const updateAdvertise = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { advertiseType, title, city, description, link, companyLogoImage, advertiseImage } = req.body
+    await AdvertiseListModel.updateOne({ _id: id }, {
+      advertiseType,
+      title,
+      city,
+      description,
+      link,
+      companyLogoImage,
+      advertiseImage,
+    });
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Advertise Updated successfully.",
+      data: {},
+    });
+  } catch (error) {
+    console.error("Error advertise update", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
 
 
 
@@ -175,5 +294,10 @@ module.exports = {
   addAdvertise,
   getListAdvertise,
   statusUpdate,
-  createAdvertise
+  createAdvertise,
+  getAdvertiseList,
+  getAdvertiseCount,
+  deleteAdvertise,
+  getAdvertiseDetail,
+  updateAdvertise
 }
