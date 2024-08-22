@@ -60,7 +60,8 @@ const getListAdvertise = async (req, res) => {
 const getAdvertiseDetail = async (req, res) => {
   try {
     const { id } = req.params;
-    const details = await AdvertiseListModel.findById({ _id: id });
+
+    const details = await AdvertiseListModel.find({ _id: id });
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
@@ -213,21 +214,23 @@ const getAdvertiseList = async (req, res) => {
 
 const getAdvertiseCount = async (req, res) => {
   try {
-    const topList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "top" });
-    const bannerList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "between" });
-    const verticalList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "vertical" });
+    if (req.Data) {
+      const topList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "top" });
+      const bannerList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "between" });
+      const verticalList = await AdvertiseListModel.find({ addedBy: req.Data, advertiseType: "vertical" });
 
-    return res.status(HTTP.SUCCESS).json({
-      status: true,
-      code: HTTP.SUCCESS,
-      message: "Advertise count successfully.",
-      data: {
-        totalAdvertise: topList.length + bannerList.length + verticalList.length,
-        topListLength: topList.length,
-        bannerListLength: bannerList.length,
-        verticalListLength: verticalList.length,
-      },
-    });
+      return res.status(HTTP.SUCCESS).json({
+        status: true,
+        code: HTTP.SUCCESS,
+        message: "Advertise count successfully.",
+        data: {
+          totalAdvertise: topList.length + bannerList.length + verticalList.length,
+          topListLength: topList.length,
+          bannerListLength: bannerList.length,
+          verticalListLength: verticalList.length,
+        },
+      });
+    }
   } catch (error) {
     console.error("Error advertise count", error);
     return res.status(HTTP.INTERNAL_SERVER_ERROR).json({

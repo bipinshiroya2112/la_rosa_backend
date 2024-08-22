@@ -7,13 +7,14 @@ const { authagency } = require("../middlewares/verifyToken");
 
 router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, advertiseController.addAdvertise)
 
+router.get('/advertise/totalCount', authagency, advertiseController.getAdvertiseCount)
 router.get('/advertise/list', authagency, advertiseController.getAdvertiseList)
-router.get('/advertise/:id', advertiseController.getAdvertiseDetail);
+router.post('/advertise/status/:id', advertiseController.statusUpdate);
+router.post('/advertise/add', authagency, AddAdvertiseValidator, ErrorHandlerValidator, advertiseController.createAdvertise)
 router.get('/advertise/delete/:id', authagency, advertiseController.deleteAdvertise)
 router.post('/advertise/update/:id', authagency, advertiseController.updateAdvertise)
 
-router.post('/advertise/status/:id', advertiseController.statusUpdate);
-router.post('/advertise/add', authagency, AddAdvertiseValidator, ErrorHandlerValidator, advertiseController.createAdvertise)
-router.get('/advertise/totalCount', authagency, advertiseController.getAdvertiseCount)
+router.get('/advertise/:id', advertiseController.getAdvertiseDetail);
+
 
 module.exports = router;
