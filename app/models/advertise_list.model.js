@@ -10,7 +10,7 @@ const advertiseListSchema = new mongoose.Schema({
     isRequired: true
   },
   city: {
-    type: String,
+    type: Array,
     isRequired: true
   },
   description: {
