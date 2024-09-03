@@ -16,5 +16,7 @@ router.post('/advertise/update/:id', authagency, advertiseController.updateAdver
 
 router.get('/advertise/:id', advertiseController.getAdvertiseDetail);
 
+router.get('/advertise/ads/list', advertiseController.getAdvertiseAdsList)
+
 
 module.exports = router;

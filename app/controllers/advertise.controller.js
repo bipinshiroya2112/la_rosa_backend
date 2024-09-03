@@ -192,7 +192,7 @@ const createAdvertise = async (req, res) => {
 
 const getAdvertiseList = async (req, res) => {
   try {
-    console.log("List::>>", req.Data)
+    // console.log("List::>>", req.Data)
     if (req.Data) {
       const result = await AdvertiseListModel.find({ addedBy: req.Data });
       return res.status(HTTP.SUCCESS).json({
@@ -290,8 +290,26 @@ const updateAdvertise = async (req, res) => {
   }
 }
 
-
-
+const getAdvertiseAdsList = async (req, res) => {
+  try {
+    const topAds = await AdvertiseListModel.findOne({ advertiseType: "top" }).sort({ createdAt: -1 });
+    const verticalAds = await AdvertiseListModel.findOne({ advertiseType: "vertical" }).sort({ createdAt: -1 });
+    const betweenAds = await AdvertiseListModel.findOne({ advertiseType: "between" }).sort({ createdAt: -1 });
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "get Ads list successfully.",
+      data: { topAds, verticalAds, betweenAds },
+    });
+  } catch (error) {
+    console.error("Error advertise update", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
 
 module.exports = {
   addAdvertise,
@@ -302,5 +320,6 @@ module.exports = {
   getAdvertiseCount,
   deleteAdvertise,
   getAdvertiseDetail,
-  updateAdvertise
+  updateAdvertise,
+  getAdvertiseAdsList
 }
