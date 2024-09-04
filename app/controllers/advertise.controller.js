@@ -294,7 +294,7 @@ const getAdvertiseAdsList = async (req, res) => {
   try {
     const topAds = await AdvertiseListModel.findOne({ advertiseType: "top" }).sort({ createdAt: -1 });
     const verticalAds = await AdvertiseListModel.findOne({ advertiseType: "vertical" }).sort({ createdAt: -1 });
-    const betweenAds = await AdvertiseListModel.findOne({ advertiseType: "between" }).sort({ createdAt: -1 });
+    const betweenAds = await AdvertiseListModel.find({ advertiseType: "between" });
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
