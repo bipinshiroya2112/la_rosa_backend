@@ -293,9 +293,30 @@ const updateAdvertise = async (req, res) => {
 
 const getAdvertiseAdsList = async (req, res) => {
   try {
-    const topAds = await AdvertiseListModel.findOne({ advertiseType: "top" }).sort({ createdAt: -1 });
-    const verticalAds = await AdvertiseListModel.findOne({ advertiseType: "vertical" }).sort({ createdAt: -1 });
-    const betweenAds = await AdvertiseListModel.find({ advertiseType: "between" });
+    const { address: currentAddress } = req.query
+    const topAds = await AdvertiseListModel.aggregate([{
+      $match: {
+        advertiseType: "top",
+        city: { $in: [currentAddress] }
+      }
+    }, { $sort: { createdAt: -1 } }]);
+
+    const verticalAds = await AdvertiseListModel.aggregate([{
+      $match: {
+        advertiseType: "vertical",
+        city: { $in: [currentAddress] }
+      }
+    },
+    { $sort: { createdAt: -1 } }]);
+
+    const betweenAds = await AdvertiseListModel.aggregate([{
+      $match: {
+        advertiseType: "between",
+        city: { $in: [currentAddress] }
+      }
+    },
+    { $sort: { createdAt: -1 } }]);
+
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
