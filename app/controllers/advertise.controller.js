@@ -194,7 +194,7 @@ const getAdvertiseList = async (req, res) => {
   try {
     // console.log("List::>>", req.Data)
     if (req.Data) {
-      const result = await AdvertiseListModel.find({ addedBy: req.Data });
+      const result = await AdvertiseUserModel.find({ addedBy: req.Data });
       result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res.status(HTTP.SUCCESS).json({
         status: true,
@@ -203,7 +203,7 @@ const getAdvertiseList = async (req, res) => {
         data: result,
       });
     } else {
-      const result = await AdvertiseListModel.find({});
+      const result = await AdvertiseUserModel.find({});
       result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res.status(HTTP.SUCCESS).json({
         status: true,
