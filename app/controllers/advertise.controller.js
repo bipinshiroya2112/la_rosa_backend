@@ -202,6 +202,15 @@ const getAdvertiseList = async (req, res) => {
         message: "get Advertise list successfully.",
         data: result,
       });
+    } else {
+      const result = await AdvertiseListModel.find({});
+      result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+      return res.status(HTTP.SUCCESS).json({
+        status: true,
+        code: HTTP.SUCCESS,
+        message: "get Advertise list successfully.",
+        data: result,
+      });
     }
   } catch (error) {
     console.error("Error advertise list", error);
