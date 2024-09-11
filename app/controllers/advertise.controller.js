@@ -192,9 +192,8 @@ const createAdvertise = async (req, res) => {
 
 const getAdvertiseList = async (req, res) => {
   try {
-    // console.log("List::>>", req.Data)
     if (req.Data) {
-      const result = await AdvertiseUserModel.find({ addedBy: req.Data });
+      const result = await AdvertiseListModel.find({ addedBy: req.Data });
       result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
       return res.status(HTTP.SUCCESS).json({
         status: true,
