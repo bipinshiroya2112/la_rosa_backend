@@ -302,6 +302,7 @@ const updateAdvertise = async (req, res) => {
 const getAdvertiseAdsList = async (req, res) => {
   try {
     const { address: currentAddress } = req.query
+    console.log("currentAddress", currentAddress);
     const topAds = await AdvertiseListModel.aggregate([{
       $match: {
         advertiseType: "top",
