@@ -316,7 +316,8 @@ const getAdvertiseAdsList = async (req, res) => {
         city: { $in: [currentAddress] }
       }
     },
-    { $sort: { createdAt: -1 } }]);
+    { $sort: { createdAt: -1 } },
+    { $limit: 1 }]);
 
     const betweenAds = await AdvertiseListModel.aggregate([{
       $match: {
