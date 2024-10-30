@@ -300,41 +300,87 @@ const updateAdvertise = async (req, res) => {
 }
 
 const getAdvertiseAdsList = async (req, res) => {
+  const { address } = req.query;
+  const currentAddress = address.toLowerCase();
+
   try {
-    const { address } = req.query
-    const currentAddress = address.toLowerCase();
-    const topAds = await AdvertiseListModel.aggregate([{
-      $match: {
-        advertiseType: "top",
-        city: { $in: [currentAddress] }
-      }
-    }, { $sort: { createdAt: -1 } }]);
+    // Fetch ads by type filtered by address and sorted by creation date
+    const topAds = await AdvertiseListModel.aggregate([
+      { $match: { advertiseType: "top", city: { $in: [currentAddress] } } },
+      { $sort: { createdAt: -1 } },
+      { $limit: 1 }
+    ]);
 
-    const verticalAds = await AdvertiseListModel.aggregate([{
-      $match: {
-        advertiseType: "vertical",
-        city: { $in: [currentAddress] }
-      }
-    },
-    { $sort: { createdAt: -1 } },
-    { $limit: 1 }]);
+    const verticalAds = await AdvertiseListModel.aggregate([
+      { $match: { advertiseType: "vertical", city: { $in: [currentAddress] } } },
+      { $sort: { createdAt: -1 } },
+      { $limit: 1 }
+    ]);
 
-    const betweenAds = await AdvertiseListModel.aggregate([{
-      $match: {
-        advertiseType: "between",
-        city: { $in: [currentAddress] }
+    const betweenAds = await AdvertiseListModel.aggregate([
+      { $match: { advertiseType: "between", city: { $in: [currentAddress] } } },
+      { $sort: { createdAt: -1 } }
+    ]);
+
+    // Function to group ads for weekly rotation
+    const groupAdsWeekly = (ads) => {
+      const grouped = [];
+      const adsPerGroup = 7;
+      for (let i = 0; i < ads.length; i += adsPerGroup) {
+        grouped.push(ads.slice(i, i + adsPerGroup));
       }
-    },
-    { $sort: { createdAt: -1 } }]);
+      return grouped;
+    };
+
+    // Group each ad type into weekly sets
+    const groupedTopAds = groupAdsWeekly(topAds);
+    const groupedVerticalAds = groupAdsWeekly(verticalAds);
+    const groupedBetweenAds = groupAdsWeekly(betweenAds);
+
+    // Determine current week in the month
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
+    let currentWeekIndex = Math.floor((currentDay - 1) / 7);
+
+    // Function to get current week ads, resetting if needed
+    const getCurrentWeekAds = (groupedAds) => {
+      if (currentWeekIndex >= groupedAds.length) {
+        currentWeekIndex = 0; // Reset to the first group if we exceed available groups
+      }
+      return groupedAds[currentWeekIndex] || [];
+    };
+
+    // Get ads for the current week for each type
+    const currentWeekTopAds = getCurrentWeekAds(groupedTopAds);
+    const currentWeekVerticalAds = getCurrentWeekAds(groupedVerticalAds);
+    const currentWeekBetweenAds = getCurrentWeekAds(groupedBetweenAds);
+
+    // Set status to true if ads haven’t been shown this week
+    const updateStatus = async (ads) => {
+      const hasShown = ads.some(ad => ad.status === true);
+      if (!hasShown) {
+        for (const ad of ads) {
+          await AdvertiseListModel.updateOne({ _id: ad._id }, { status: true });
+        }
+      }
+    };
+
+    await updateStatus(currentWeekTopAds);
+    await updateStatus(currentWeekVerticalAds);
+    await updateStatus(currentWeekBetweenAds);
 
     return res.status(HTTP.SUCCESS).json({
       status: true,
       code: HTTP.SUCCESS,
-      message: "get Ads list successfully.",
-      data: { topAds, verticalAds, betweenAds },
+      message: "Ads list fetched successfully.",
+      data: {
+        topAds: currentWeekTopAds,
+        verticalAds: currentWeekVerticalAds,
+        betweenAds: currentWeekBetweenAds
+      }
     });
   } catch (error) {
-    console.error("Error advertise update", error);
+    console.error("Error fetching ads:", error);
     return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
       status: false,
       code: HTTP.INTERNAL_SERVER_ERROR,

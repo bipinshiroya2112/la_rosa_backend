@@ -32,6 +32,10 @@ const advertiseListSchema = new mongoose.Schema({
   addedBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "register"
+  },
+  status: {
+    type: Boolean,
+    default: false
   }
 }, {
   timestamps: true,
