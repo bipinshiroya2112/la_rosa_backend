@@ -187,8 +187,9 @@ function authagency(req, res, next) {
   if (!decodedToken) {
     console.log("error from authagency");
   }
-  req.Data = decodedToken?.payload.id;
 
+  req.Data = decodedToken?.payload.id;
+  req.user = decodedToken?.payload;
   return next();
 }
 

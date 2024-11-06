@@ -1,6 +1,7 @@
 const AdvertiseUserModel = require('../models/advertise_user.model')
 const HTTP = require("../../constants/responseCode.constant");
 const STATUS = require('../../constants/status.constant');
+const ROLE = require('../../constants/role.constant');
 const Register = require('../models/register')
 var generator = require('generate-password');
 const { genSaltSync, hashSync, compareSync } = require("bcrypt");
@@ -112,13 +113,13 @@ const statusUpdate = async (req, res) => {
       await Register.create({
         email: details.email,
         password: hashSync(password, salt),
-        role: 'advertise',
+        role: ROLE.ADVERTISE,
         phoneNumber: details.phoneNumber,
         firstName: details.fullName,
       });
 
       var sendMailData = {
-        file_template: "./public/EmailTemplates/create_client.html",
+        file_template: "./public/EmailTemplates/advertiseUser.html",
         subject: "Congratulation dear vendor Laro-sa",
         to: details.email || null,
         password: password,
@@ -306,19 +307,19 @@ const getAdvertiseAdsList = async (req, res) => {
   try {
     // Fetch ads by type filtered by address and sorted by creation date
     const topAds = await AdvertiseListModel.aggregate([
-      { $match: { advertiseType: "top", city: { $in: [currentAddress] } } },
+      { $match: { advertiseType: "top", approved_status: STATUS.APPROVED, city: { $in: [currentAddress] } } },
       { $sort: { createdAt: -1 } },
       { $limit: 1 }
     ]);
 
     const verticalAds = await AdvertiseListModel.aggregate([
-      { $match: { advertiseType: "vertical", city: { $in: [currentAddress] } } },
+      { $match: { advertiseType: "vertical", approved_status: STATUS.APPROVED, city: { $in: [currentAddress] } } },
       { $sort: { createdAt: -1 } },
       { $limit: 1 }
     ]);
 
     const betweenAds = await AdvertiseListModel.aggregate([
-      { $match: { advertiseType: "between", city: { $in: [currentAddress] } } },
+      { $match: { advertiseType: "between", approved_status: STATUS.APPROVED, city: { $in: [currentAddress] } } },
       { $sort: { createdAt: -1 } }
     ]);
 
@@ -388,6 +389,51 @@ const getAdvertiseAdsList = async (req, res) => {
     });
   }
 }
+const updateAdvertiseStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body
+    if (!status) {
+      return res.status(HTTP.BAD_REQUEST).send({
+        status: false,
+        code: HTTP.BAD_REQUEST,
+        message: "status required!",
+        data: {},
+      });
+    }
+    if (req.user.role === ROLE.ADMIN) {
+      const updateAds = await AdvertiseListModel.updateOne({ _id: id }, { approved_status: status }, { new: true })
+      if (updateAds.modifiedCount == 0) {
+        return res.status(HTTP.NOT_FOUND).send({
+          status: false,
+          code: HTTP.BAD_REQUEST,
+          message: "ads details not found!",
+          data: {},
+        });
+      }
+      return res.status(HTTP.SUCCESS).json({
+        status: true,
+        code: HTTP.SUCCESS,
+        message: "Ads status updated.",
+        data: {},
+      });
+    } else {
+      return res.status(HTTP.SUCCESS).send({
+        success: false,
+        code: HTTP.UNAUTHORIZED,
+        message: "Access Denied! Unauthorized User",
+        data: {},
+      });
+    }
+  } catch (error) {
+    console.error("Error fetching ads status update:", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
 
 module.exports = {
   addAdvertise,
@@ -399,5 +445,6 @@ module.exports = {
   deleteAdvertise,
   getAdvertiseDetail,
   updateAdvertise,
-  getAdvertiseAdsList
+  getAdvertiseAdsList,
+  updateAdvertiseStatus
 }

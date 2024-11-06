@@ -50,12 +50,6 @@ const path = require("path");
 async function signin(req, res) {
   try {
     let { email, password, role } = req.body;
-
-    console.log(
-      " file: admin.controller.js : - 55 ~ signin ~ req.body",
-      req.body
-    );
-
     if (!req.body || !password || !email) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -77,14 +71,6 @@ async function signin(req, res) {
       });
     }
 
-    // if (adminExists.role !== "admin" || adminExists.role !== "advertise")
-    //   return res.status(HTTP.SUCCESS).send({
-    //     status: false,
-    //     code: HTTP.BAD_REQUEST,
-    //     message: "Invalid credentials.",
-    //     data: {},
-    //   });
-
     if (!bcrypt.compareSync(password, adminExists.password)) {
       return res.status(HTTP.SUCCESS).send({
         success: false,
@@ -93,9 +79,10 @@ async function signin(req, res) {
         data: {},
       });
     }
+    console.log("adminExists::>>>>", adminExists);
 
     const token = jwt.sign(
-      { id: adminExists._id, email: adminExists.email },
+      { id: adminExists._id, email: adminExists.email, role: adminExists.role },
       "hello@user"
     );
     // console.log(" file: admin.controller.js: 77 ~ signin ~ token", token);

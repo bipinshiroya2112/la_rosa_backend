@@ -3,4 +3,5 @@ module.exports = {
   PENDING: 'pending',
   REJECTED: 'rejected',
   FAILED: 'failed',
+  APPROVED: 'approved'
 }

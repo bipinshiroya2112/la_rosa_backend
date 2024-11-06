@@ -36,6 +36,10 @@ const advertiseListSchema = new mongoose.Schema({
   status: {
     type: Boolean,
     default: false
+  },
+  approved_status: {
+    type: String,
+    default: 'Waiting for approval'
   }
 }, {
   timestamps: true,
