@@ -9,6 +9,7 @@ router.post('/advertise', AdvertiseValidator, ErrorHandlerValidator, advertiseCo
 
 router.get('/advertise/totalCount', authagency, advertiseController.getAdvertiseCount)
 router.get('/advertise/list', authagency, advertiseController.getAdvertiseList)
+router.get('/advertise/all/list', authagency, advertiseController.getAdvertiseAllList)
 router.post('/advertise/status/:id', advertiseController.statusUpdate);
 router.post('/advertise/add', authagency, AddAdvertiseValidator, ErrorHandlerValidator, advertiseController.createAdvertise)
 router.get('/advertise/delete/:id', authagency, advertiseController.deleteAdvertise)

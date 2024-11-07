@@ -222,6 +222,34 @@ const getAdvertiseList = async (req, res) => {
   }
 }
 
+const getAdvertiseAllList = async (req, res) => {
+  try {
+    if (req.user.role !== ROLE.ADMIN) {
+      return res.status(HTTP.SUCCESS).send({
+        success: false,
+        code: HTTP.UNAUTHORIZED,
+        message: "Access Denied! Unauthorized User",
+        data: {},
+      });
+    }
+    const result = await AdvertiseListModel.find({});
+    result.sort((a, b) => (a.createdAt < b.createdAt) ? 1 : -1);
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "get Advertise list successfully.",
+      data: result,
+    });
+  } catch (error) {
+    console.error("Error advertise list", error);
+    return res.status(HTTP.INTERNAL_SERVER_ERROR).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+
 const getAdvertiseCount = async (req, res) => {
   try {
     if (req.Data) {
@@ -446,5 +474,6 @@ module.exports = {
   getAdvertiseDetail,
   updateAdvertise,
   getAdvertiseAdsList,
-  updateAdvertiseStatus
+  updateAdvertiseStatus,
+  getAdvertiseAllList
 }
