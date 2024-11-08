@@ -165,6 +165,30 @@ const statusUpdate = async (req, res) => {
 const createAdvertise = async (req, res) => {
   try {
     const { advertiseType, title, city, description, link, companyLogoImage, advertiseImage } = req.body
+    const typeLimits = {
+      top: 1,
+      between: 10,
+      vertical: 10,
+    };
+    const limit = typeLimits[advertiseType];
+    if (limit === undefined) {
+      return res.status(HTTP.SUCCESS).json({
+        status: false,
+        code: HTTP.BAD_REQUEST,
+        message: "Invalid advertise type provided.",
+      });
+    }
+    const existingAdsCount = await AdvertiseListModel.countDocuments({
+      advertiseType,
+      city: { $in: city },
+    });
+    if (existingAdsCount >= limit) {
+      return res.status(HTTP.SUCCESS).json({
+        status: false,
+        code: HTTP.SUCCESS,
+        message: `Advertisement type is occupied for this location`,
+      });
+    }
     await AdvertiseListModel.create({
       advertiseType,
       title,
