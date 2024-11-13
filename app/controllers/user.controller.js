@@ -152,7 +152,7 @@ async function signup(req, res) {
     file_template: "./public/EmailTemplates/verifyOtp.html",
     subject: "MyRealEstate Sign-in Verification",
     to: email ? email : null,
-    username: `${firstname} ${lastname}`,
+    username: `User`,
     otp: otpCheck,
   };
 
@@ -334,7 +334,7 @@ async function resendOtp(req, res) {
       subject: "Resent OTP - MyRealEstate",
       to: email ? email : null,
       otp: newOtp,
-      username: `${checkVerified.firstname} ${checkVerified.lastname}`
+      username: `User`
     };
 
     sendEmailOTP(sendMailData)
