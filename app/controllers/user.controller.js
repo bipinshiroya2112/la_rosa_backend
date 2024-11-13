@@ -360,7 +360,7 @@ async function resendOtp(req, res) {
       status: true,
       code: HTTP.SUCCESS,
       message: "Otp Resent, check mail!",
-      data: { newOtp },
+      data: {},
     });
   } catch (e) {
     console.log(e);
