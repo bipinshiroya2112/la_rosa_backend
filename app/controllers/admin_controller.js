@@ -1686,50 +1686,50 @@ async function ListingCreate(req, res) {
         statementOfInfo: statementPdf,
       }).save();
 
-      if (
-        (send_vendor_the_property_live_email_when_listing_is_published = true)
-      ) {
-        const newOtp = "Congratulations! your property is live now on La-Rosa";
-        var sendMailData = {
-          file_template: "./public/EmailTemplates/welcome.html",
-          subject: "Congratulatiopn dear vendor Laro-sa",
-          to: email ? email : null,
-          // "username": `${checkVerified.firstname}`,0
-          property: `${newOtp}`,
-        };
+      // if (
+      //   (send_vendor_the_property_live_email_when_listing_is_published = true)
+      // ) {
+      //   const newOtp = "Congratulations! your property is live now on La-Rosa";
+      //   var sendMailData = {
+      //     file_template: "./public/EmailTemplates/welcome.html",
+      //     subject: "Congratulation dear",
+      //     to: email ? email : null,
+      //     // "username": `${checkVerified.firstname}`,0
+      //     property: `${newOtp}`,
+      //   };
 
-        sendEmailOTP(sendMailData)
-          .then((val) => {
-            return res
-              .status(HTTP.SUCCESS)
-              .send({
-                status: true,
-                code: HTTP.SUCCESS,
-                message: "Please check your email.",
-                data: val,
-              });
-          })
-          .catch((err) => {
-            console.log(err);
-            return res
-              .status(HTTP.SUCCESS)
-              .send({
-                status: false,
-                code: HTTP.BAD_REQUEST,
-                message: "Unable to send email!",
-                data: {},
-              });
-          });
+      //   sendEmailOTP(sendMailData)
+      //     .then((val) => {
+      //       return res
+      //         .status(HTTP.SUCCESS)
+      //         .send({
+      //           status: true,
+      //           code: HTTP.SUCCESS,
+      //           message: "Please check your email.",
+      //           data: val,
+      //         });
+      //     })
+      //     .catch((err) => {
+      //       console.log(err);
+      //       return res
+      //         .status(HTTP.SUCCESS)
+      //         .send({
+      //           status: false,
+      //           code: HTTP.BAD_REQUEST,
+      //           message: "Unable to send email!",
+      //           data: {},
+      //         });
+      //     });
 
-        return res
-          .status(HTTP.SUCCESS)
-          .send({
-            status: true,
-            code: HTTP.SUCCESS,
-            message: "Email send to the vendor!",
-            data: {},
-          });
-      }
+      //   return res
+      //     .status(HTTP.SUCCESS)
+      //     .send({
+      //       status: true,
+      //       code: HTTP.SUCCESS,
+      //       message: "Email send to the vendor!",
+      //       data: {},
+      //     });
+      // }
 
       return res
         .status(HTTP.SUCCESS)

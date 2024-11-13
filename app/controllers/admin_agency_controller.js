@@ -2801,15 +2801,13 @@ async function vendorEmail(req, res) {
     // if (!updateData) {
     //   return res.status(HTTP.SUCCESS).send({ "status": false, 'code': HTTP.BAD_REQUEST, "message": "Could not find vendor!", data: {} })
     // }
-    const newOtp = "Congratulations! your property is live now on La-Rosa";
+    const message = "Congratulations! your property is live now on La-Rosa";
     // resend otp email template ===========================
 
     var sendMailData = {
       file_template: "./public/EmailTemplates/welcome.html",
-      subject: "Congratulatiopn dear vendor Laro-sa",
+      subject: "Welcome to MyRealEstate",
       to: email ? email : null,
-      // "username": `${checkVerified.firstname}`,0
-      property: `${newOtp}`,
     };
 
     sendEmailOTP(sendMailData)

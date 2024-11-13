@@ -68,7 +68,6 @@ async function signup(req, res) {
     SaveSearch = null,
     isVerified,
   } = req.body;
-  console.log(req.body, " ---- signup ---- req.body");
 
   if (!email || !password) {
     return res.status(HTTP.SUCCESS).send({
@@ -151,11 +150,10 @@ async function signup(req, res) {
 
   var sendMailData = {
     file_template: "./public/EmailTemplates/verifyOtp.html",
-    subject: "Verify Email",
+    subject: "MyRealEstate Sign-in Verification",
     to: email ? email : null,
-    // "message": `Dear ${ firstname },` + 'some words'
-    // "username": `${firstname}`,
-    otp: `${otpCheck}`,
+    username: `${firstname} ${lastname}`,
+    otp: otpCheck,
   };
 
   sendEmailOTP(sendMailData)
@@ -333,10 +331,10 @@ async function resendOtp(req, res) {
 
     var sendMailData = {
       file_template: "./public/EmailTemplates/resendOtp.html",
-      subject: "Resent OTP - Laro-sa",
+      subject: "Resent OTP - MyRealEstate",
       to: email ? email : null,
-      // "username": `${checkVerified.firstname}`,0
-      otp: `${newOtp}`,
+      otp: newOtp,
+      username: `${checkVerified.firstname} ${checkVerified.lastname}`
     };
 
     sendEmailOTP(sendMailData)
@@ -425,6 +423,31 @@ async function verifyOtp(req, res) {
 
       //genrate JWT token and store session data
       const authToken = await createSessionAndJwtToken(update);
+
+      var sendMailData = {
+        file_template: "./public/EmailTemplates/welcome.html",
+        subject: "Welcome to MyRealEstate",
+        to: email ? email : null,
+      };
+
+      sendEmailOTP(sendMailData)
+        .then((val) => {
+          return res.status(HTTP.SUCCESS).send({
+            status: true,
+            code: HTTP.SUCCESS,
+            message: "Please check your email.",
+            data: val,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          return res.status(HTTP.SUCCESS).send({
+            status: false,
+            code: HTTP.BAD_REQUEST,
+            message: "Unable to send email!",
+            data: {},
+          });
+        });
 
       return res.status(HTTP.SUCCESS).send({
         status: true,

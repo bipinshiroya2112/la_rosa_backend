@@ -120,7 +120,7 @@ const statusUpdate = async (req, res) => {
 
       var sendMailData = {
         file_template: "./public/EmailTemplates/advertiseUser.html",
-        subject: "Congratulation dear vendor Laro-sa",
+        subject: "Welcome to MyRealEstate's Advertiser Platform.",
         to: details.email || null,
         password: password,
         email: details.email
