@@ -122,11 +122,11 @@ const sendEmailOTP = (sendData) => {
           to: sendData.to,
           subject: subject,
           html: htmlToSend,
-          attachments: [{
-            filename: 'image.png',
-            path: 'public/EmailTemplates/img/logo.png',
-            cid: 'unique@imageid'
-          }]
+          // attachments: [{
+          //   filename: 'image.png',
+          //   path: 'public/EmailTemplates/img/logo.png',
+          //   cid: 'unique@imageid'
+          // }]
         };
 
         transporter.sendMail(mailOptions, (error, info) => {
