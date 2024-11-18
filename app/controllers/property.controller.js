@@ -360,7 +360,7 @@ async function sendEnquiry(req, res) {
       message,
       // prefer_to_be_contacted,
       name,
-      address,
+      // address,
       mobile_no,
       agent_id,
       // agency_id,
@@ -382,11 +382,14 @@ async function sendEnquiry(req, res) {
     const result = await sendEnquirys({
       user_id,
       agent_id,
+      first_name,
+      last_name,
       // agency_id,
       message,
       // prefer_to_be_contacted,
       name,
-      address,
+      email,
+      // address,
       mobile_no,
     }).save();
 
