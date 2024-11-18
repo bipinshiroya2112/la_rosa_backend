@@ -2264,7 +2264,7 @@ async function viewAllAgents(req, res) {
     var key = req.params.key;
     // console.log("🚀 ~ viewAllAgents ~ key:", key)
     var usersData;
-    if (key == undefined) {
+    if (key == 'undefined') {
       usersData = await Admin_agent.find({}).populate("agency_id");
       // console.log("🚀 ~ viewAllAgents ~ usersData:", usersData)
     } else {
@@ -2312,13 +2312,13 @@ async function viewAllAgents(req, res) {
           average,
           // agencySmallLogo: 'uploads/agency_image/commercialAgencySmallLogo-1680591891362.png',
           // agencyName: 'agency name',
-          agencyId: data.agency_id.id,
-          agencySmallLogo: data.agency_id.agencySmallLogo,
-          agencyName: data.agency_id.principal_name,
+          agencyId: data?.agency_id?._id,
+          agencySmallLogo: data.agency_id?.agencySmallLogo,
+          agencyName: data.agency_id?.principal_name,
           propertyDetails: propertyDetails,
-          primary_color: data.agency_id.primary_color,
-          secondary_color: data.agency_id.secondary_color,
-          text_color: data.agency_id.text_color,
+          primary_color: data.agency_id?.primary_color,
+          secondary_color: data.agency_id?.secondary_color,
+          text_color: data.agency_id?.text_color,
           medianPrice: data.medianPrice,
           property_sold: data.property_sold,
         });
