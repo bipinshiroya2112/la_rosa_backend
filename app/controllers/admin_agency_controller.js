@@ -2264,7 +2264,7 @@ async function viewAllAgents(req, res) {
     var key = req.params.key;
     // console.log("🚀 ~ viewAllAgents ~ key:", key)
     var usersData;
-    if (key == "undefined") {
+    if (key == undefined) {
       usersData = await Admin_agent.find({}).populate("agency_id");
       // console.log("🚀 ~ viewAllAgents ~ usersData:", usersData)
     } else {
