@@ -46,11 +46,11 @@ const propertydetails = new Schema({
     },
     priceRange: {
         min: {
-            type: Number,
+            type: String,
             // require : true,
         },
         max: {
-            type: Number,
+            type: String,
             // require : true,
         }
     },
