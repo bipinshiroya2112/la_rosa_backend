@@ -77,8 +77,8 @@ async function sendPropertyDetails(req, res) {
     }
     const jsonPriceRange = JSON.parse(priceRange);
     const priceRangeValue = {
-      min: jsonPriceRange[0].min.split('^$')[1],
-      max: jsonPriceRange[1].max.split('^$')[1]
+      min: jsonPriceRange[0].min.split('$')[1],
+      max: jsonPriceRange[1].max.split('$')[1]
     };
     const data = await sendPropertyDetail({
       agent_id,
