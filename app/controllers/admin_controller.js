@@ -14,6 +14,7 @@ const axios = require("axios");
 const fs = require("fs");
 const path = require("path");
 var unirest = require("unirest");
+const Blog = require("../models/blog.model");
 
 async function TotalCount(req, res) {
   try {
@@ -2354,10 +2355,76 @@ async function userBlock(req, res) {
       });
   }
 }
+//==================================== Blog =============================================================
 
-//==============================================================  google map  ======================================================================
+const getBlog = async (req, res) => {
+  try {
+    const blog = await Blog.find({});
+    return res.status(200).json({ message: "Blog data fetch successfully", data: blog, status: true })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HTTP.SUCCESS)
+      .send({
+        success: false,
+        code: HTTP.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        data: {},
+      });
+  }
+}
+const createBlog = async (req, res) => {
+  try {
+    req.body.created_by = req.Data
+    const blog = await Blog.create(req.body);
+    await blog.save()
+    return res.status(200).json({ message: "Blog created successfully", status: true })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HTTP.SUCCESS)
+      .send({
+        success: false,
+        code: HTTP.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        data: {},
+      });
+  }
+}
 
-//===============================================================================================================================
+const updateBlog = async (req, res) => {
+  try {
+    await Blog.findByIdAndUpdate({ _id: req.params.id }, req.body, { new: true });
+    return res.status(200).json({ message: "Blog update successfully", status: true })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HTTP.SUCCESS)
+      .send({
+        success: false,
+        code: HTTP.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        data: {},
+      });
+  }
+}
+
+const deleteBlog = async (req, res) => {
+  try {
+    await Blog.findByIdAndDelete({ _id: req.params.id });
+    return res.status(200).json({ message: "Blog delete successfully", status: true })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HTTP.SUCCESS)
+      .send({
+        success: false,
+        code: HTTP.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        data: {},
+      });
+  }
+}
 
 module.exports = {
   TotalCount,
@@ -2382,5 +2449,9 @@ module.exports = {
   propertyDelete,
   viewallUser,
   Userdelete,
-  userBlock
+  userBlock,
+  createBlog,
+  updateBlog,
+  deleteBlog,
+  getBlog
 };

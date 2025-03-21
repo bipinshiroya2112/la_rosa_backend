@@ -180,12 +180,12 @@ function authUser(req, res, next) {
 }
 //===========================================================================================================================================================================
 
-function authagency(req, res, next) {
+function authAgency(req, res, next) {
 
   const decodedToken = jwt.decode(req.headers.authorization, { complete: true });
 
   if (!decodedToken) {
-    console.log("error from authagency");
+    console.log("error from authAgency");
   }
 
   req.Data = decodedToken?.payload.id;
@@ -203,7 +203,7 @@ function auth(req, res, next) {
   const decodedToken = jwt.verify(bearer, process.env.JWT_SECRET, { complete: true });
 
   if (!decodedToken) {
-    console.log("error from authagency");
+    console.log("error from authAgency");
   }
   req.Data = decodedToken?.payload.id;
 
@@ -236,7 +236,7 @@ module.exports = {
   verifyToken,
   verifyResetPasswordToken,
   authUser,
-  authagency,
+  authAgency,
   authadmin,
   auth
 };

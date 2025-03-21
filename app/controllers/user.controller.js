@@ -25,6 +25,7 @@ const { log } = require("handlebars");
 const property_listing = require("../models/property_listing");
 const contact = require("../models/contactusmodel");
 const { request } = require("http");
+const blogModel = require("../models/blog.model");
 // const serviceID = "VAe2e2e9000916b9296ac0a737e822b587"
 // const accountsID = "ACa15e8faf0a240436169630f2712e47b3"
 // const authToken = "85302ad861c5fff587d6ab6dc07c381e"
@@ -1944,6 +1945,42 @@ const updatePassword = async (req, res) => {
     });
   }
 }
+//===================  blog ====================================================================================
+
+const getBlog = async (req, res) => {
+  try {
+    const blog = await blogModel.find({})
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Blog data fetch successfully",
+      data: blog,
+    });
+  } catch (error) {
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
+const getIdByBlog = async (req, res) => {
+  try {
+    const blog = await blogModel.findById({ _id: req.params.id })
+    return res.status(HTTP.SUCCESS).json({
+      status: true,
+      code: HTTP.SUCCESS,
+      message: "Blog data fetch successfully",
+      data: blog,
+    });
+  } catch (error) {
+    res.status(HTTP.SUCCESS).json({
+      status: false,
+      code: HTTP.INTERNAL_SERVER_ERROR,
+      error: "Internal Server Error",
+    });
+  }
+}
 
 module.exports = {
   dashboard,
@@ -1978,4 +2015,6 @@ module.exports = {
   deleteAccount,
   signOutAll,
   propertyData,
+  getBlog,
+  getIdByBlog
 };

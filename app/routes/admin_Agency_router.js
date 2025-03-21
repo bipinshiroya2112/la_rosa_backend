@@ -10,7 +10,7 @@ const {
   verifyToken,
   verifyResetPasswordToken,
 } = require("../middlewares/verifyToken.js");
-const { authagency } = require("../middlewares/verifyToken.js");
+const { authAgency } = require("../middlewares/verifyToken.js");
 const agent_img = require("../middlewares/agent.upload");
 const property_upload = require("../middlewares/property.upload");
 const passport = require("passport");
@@ -48,25 +48,25 @@ router.get("/agentadmin/viewAllAgency", adminagencyController.viewAllAgency);
 // router.post('/AgencyProfile/Register',image_upload, adminagencyController.AgencyProfileRagister);
 router.post(
   "/agency/ViewProfile",
-  authagency,
+  authAgency,
   adminagencyController.agencyViewProfile
 );
 router.post("/agency/ViewProfile_U", adminagencyController.agencyViewProfile_U);
 router.post(
   "/agency/UpdateProfile",
-  authagency,
+  authAgency,
   adminagencyController.agencyUpdateProfile
 );
-router.post("/agency/Delete", authagency, adminagencyController.agencyDelete);
+router.post("/agency/Delete", authAgency, adminagencyController.agencyDelete);
 
 //=================== Page : 21 Agency branding and images ====================
 
 // router.post('/agency/branding', upload, adminagencyController.Agency_Branding_img)
-// router.post('/agency/brandingView', authagency, adminagencyController.Agency_Branding_View)
+// router.post('/agency/brandingView', authAgency, adminagencyController.Agency_Branding_View)
 router.post(
   "/agency/branding_Update",
   upload,
-  authagency,
+  authAgency,
   adminagencyController.Agency_Branding_Update
 );
 
@@ -75,7 +75,7 @@ router.post(
 router.post(
   "/Agency_Agent/Register",
   upload,
-  authagency,
+  authAgency,
   adminagencyController.agentregister
 );
 router.post(
@@ -91,7 +91,7 @@ router.post(
 router.post("/Agency_Agent/Delete", adminagencyController.agentDelete);
 router.post(
   "/Agency_Agent/viewAllAgentsOfAgency",
-  authagency,
+  authAgency,
   adminagencyController.viewAllAgentsOfAgency
 );
 router.post(
@@ -108,20 +108,20 @@ router.post(
 router.post(
   "/Agency/property_listing",
   property_upload,
-  authagency,
+  authAgency,
   propertyController.propertyListing
 );
 router.post("/Agency/viewProperty", propertyController.viewProperty);
 router.get(
   "/Agency/viewAgencyProperty",
-  authagency,
+  authAgency,
   propertyController.viewAgencyProperty
 );
 router.post("/Agency/propertyByAgency", propertyController.propertyByAgency);
 router.post(
   "/Agency/property_update",
   property_upload,
-  authagency,
+  authAgency,
   propertyController.propertyUpdate
 );
 router.post("/Agency/viewAllProperty", propertyController.viewAllProperty);
@@ -141,7 +141,7 @@ router.post("/searchAgentsInSuburb", searchController.searchAgentsInSuburb);
 //========================= agency sort properties ===============================
 
 router.post("/sorting", adminagencyController.sortBy);
-// router.post('/sortByAgent', authagency, adminagencyController.sortByAgent);
+// router.post('/sortByAgent', authAgency, adminagencyController.sortByAgent);
 
 router.post("/map/property", adminagencyController.mapsearch);
 

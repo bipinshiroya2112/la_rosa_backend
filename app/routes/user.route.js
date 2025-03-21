@@ -3,7 +3,7 @@ const router = express.Router();
 const userControllers = require("../controllers/user.controller");
 const userdetaislControllers = require("../controllers/userdetails.controller");
 const propertyControllers = require("../controllers/property.controller");
-const { verifyToken, verifyResetPasswordToken, authagency } = require("../middlewares/verifyToken");
+const { verifyToken, verifyResetPasswordToken, authAgency } = require("../middlewares/verifyToken");
 const { authUser } = require("../middlewares/verifyToken");
 const { auth } = require("../middlewares/verifyToken");
 const ErrorHandlerValidator = require("../validator/errorHandlerValidator");
@@ -52,8 +52,8 @@ router.post("/savedProperty", authUser, userControllers.savedProperty);
 
 router.get("/inspection", userControllers.inspection);
 
-router.get("/get/enquiries", authagency, propertyControllers.getEnquiries);
-router.get("/get/appraisal", authagency, propertyControllers.getAppraisal);
+router.get("/get/enquiries", authAgency, propertyControllers.getEnquiries);
+router.get("/get/appraisal", authAgency, propertyControllers.getAppraisal);
 
 router.post("/SaveSearch", auth, userControllers.SaveSearch);
 router.post("/SearchShow", auth, userControllers.SearchShow);
@@ -75,4 +75,7 @@ router.get("/latestagent", userControllers.latestAgent);
 router.post("/deleteAccount", userControllers.deleteAccount);
 router.get("/signOutAll", userControllers.signOutAll);
 router.get("/propertyData/:id", userControllers.propertyData);
+
+router.get('/blog', userControllers.getBlog)
+router.get('/blog/:id', userControllers.getIdByBlog)
 module.exports = router;
