@@ -2359,7 +2359,23 @@ async function userBlock(req, res) {
 
 const getBlog = async (req, res) => {
   try {
-    const blog = await Blog.find({});
+    const blog = await Blog.find({}).select("-content");
+    return res.status(200).json({ message: "Blog data fetch successfully", data: blog, status: true })
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HTTP.SUCCESS)
+      .send({
+        success: false,
+        code: HTTP.INTERNAL_SERVER_ERROR,
+        message: "Something went wrong!",
+        data: {},
+      });
+  }
+}
+const getByIdBlog = async (req, res) => {
+  try {
+    const blog = await Blog.findById({ _id: req.params.id });
     return res.status(200).json({ message: "Blog data fetch successfully", data: blog, status: true })
   } catch (error) {
     console.log(error);
@@ -2453,5 +2469,6 @@ module.exports = {
   createBlog,
   updateBlog,
   deleteBlog,
-  getBlog
+  getBlog,
+  getByIdBlog
 };

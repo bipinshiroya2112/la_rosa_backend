@@ -11,9 +11,9 @@ const blogSchema = new Schema({
     type: String,
     required: true
   },
-  slug: {
+  coverImage: {
     type: String,
-    required: false,
+    required: true,
   },
   description: {
     type: String,

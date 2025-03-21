@@ -56,6 +56,7 @@ router.post('/userBlock/:id', adminController.userBlock);
 //=============================== blog ============================
 router.post('/admin/blog', authAgency, uploadWithOutFile.none(), adminController.createBlog)
 router.get('/admin/blog', authAgency, adminController.getBlog)
+router.get('/admin/blog/:id', authAgency, adminController.getByIdBlog)
 router.put('/admin/blog/:id', authAgency, uploadWithOutFile.none(), adminController.updateBlog)
 router.delete('/admin/blog/:id', authAgency, adminController.deleteBlog)
 
